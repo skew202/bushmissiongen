@@ -121,10 +121,10 @@ public class TitlePage extends AbstractWizardPage {
 		c.gridy = currentRow++;
 		c.fill=GridBagConstraints.HORIZONTAL;
 		c.anchor=GridBagConstraints.EAST;
-		List<String> planesList = new ArrayList<>(Arrays.asList(SimData.planes));
-		planesList.addAll(SimData.encryptedOfficial);
+		List<String> planesList = new ArrayList<>(Arrays.asList(SimData.getInstance().planes));
+		planesList.addAll(SimData.getInstance().encryptedOfficial);
 		planesList.add(SimData.THIRD_PARTY_PLANE);
-		planeCombo = new JComboBox<String>(planesList.toArray(String[]::new));
+		planeCombo = new JComboBox<String>(planesList.toArray(new String[planesList.size()]));
 		planeCombo.setSize(planeCombo.getPreferredSize());
 		add(planeCombo, c);
 

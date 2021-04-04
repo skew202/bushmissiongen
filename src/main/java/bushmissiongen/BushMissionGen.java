@@ -65,7 +65,9 @@ public class BushMissionGen {
 	public static final String VERSION = "1.84";
 
 	// NEWS
-	// - 
+	// - Updates extras files by cptdev!
+	// - Bug fix if the user had Java 8 installed.
+	// - Small updates.
 
 	// TO DO
 	// - What is the Overview.htm file used for in landing challenges?
@@ -145,7 +147,7 @@ public class BushMissionGen {
 		mArgs = args;
 		mGUI = new GUI(this);
 
-		String[] simPaths = SimData.getPaths();
+		String[] simPaths = SimData.getInstance().getPaths();
 		if (simPaths != null) {
 			COMMUNITY_DIR = simPaths[0];
 			OFFICIAL_DIR = simPaths[1];
@@ -701,7 +703,7 @@ public class BushMissionGen {
 						}
 
 						if (!system.isEmpty()) {
-							boolean wasFound = SimData.systemsList.contains(system);
+							boolean wasFound = SimData.getInstance().systemsList.contains(system);
 
 							if (wasFound) {
 								FailureEntry fe = new FailureEntry(metaName, "Failure", value.trim(), system, subIndex, exit, feMode);
@@ -1103,7 +1105,7 @@ public class BushMissionGen {
 
 		String recept_fileXML = "##PATH_DIR##" + File.separator + "templates" + File.separator + metaEntry.missionType + "_template.xml";
 		if (metaEntry.missionType.equals("land")) {
-			if (SimData.airliners.contains(metaEntry.plane) || !metaEntry.forceAirliner.isEmpty()) {
+			if (SimData.getInstance().airliners.contains(metaEntry.plane) || !metaEntry.forceAirliner.isEmpty()) {
 				String recept_landing_airliner = "##PATH_DIR##" + File.separator + "templates" + File.separator + MetaEntry.LandingChallenge_AirlinerTemplate + ".xml";
 				String recept_landing_airliner_nogear = "##PATH_DIR##" + File.separator + "templates" + File.separator + MetaEntry.LandingChallenge_AirlinerNoGearTemplate + ".xml";
 
@@ -3689,7 +3691,7 @@ public class BushMissionGen {
 
 		FLT_FILE = FLT_FILE.replace("##META_SIMFILE##", metaEntry.simFile);
 
-		if (SimData.airliners.contains(metaEntry.plane) || !metaEntry.forceAirliner.isEmpty()) {
+		if (SimData.getInstance().airliners.contains(metaEntry.plane) || !metaEntry.forceAirliner.isEmpty()) {
 			FLT_FILE = FLT_FILE.replace("##META_FUEL##", FLT_FUELSYSTEM);
 		} else {
 			FLT_FILE = FLT_FILE.replace("##META_FUEL##", FLT_FUEL);
@@ -3752,7 +3754,7 @@ public class BushMissionGen {
 
 		for (FailureEntry fe : metaEntry.failureEntries) {
 			if (fe.currentMode == FailureEntryMode.ARM) {
-				String failureCode = SimData.systemToFailureCodeMap.get(fe.system);
+				String failureCode = SimData.getInstance().systemToFailureCodeMap.get(fe.system);
 
 				if (failureCode != null) {
 					String failure = failureTemplate.replace("##FAILURE_COUNT##", String.valueOf(count_FAILURES++));
@@ -3824,8 +3826,8 @@ public class BushMissionGen {
 		// Airliner landing?
 		String airlinerLandText = "";
 		String airlinerControlsText = "";
-		PlaneData planeData = SimData.getPlaneData(metaEntry);
-		if (metaEntry.missionType.equals("land") && (SimData.airliners.contains(metaEntry.plane) || !metaEntry.forceAirliner.isEmpty())) {
+		PlaneData planeData = SimData.getInstance().getPlaneData(metaEntry);
+		if (metaEntry.missionType.equals("land") && (SimData.getInstance().airliners.contains(metaEntry.plane) || !metaEntry.forceAirliner.isEmpty())) {
 			airlinerLandText = FLT_AIRLINER_LAND;
 			airlinerControlsText = FLT_CONTROLS_AIRLINER;
 		}
@@ -4720,7 +4722,7 @@ public class BushMissionGen {
 						sb1.append("simFile=approach.FLT").append(System.lineSeparator());
 					}
 				}
-				if (!SimData.airliners.contains(planeValue)) {
+				if (!SimData.getInstance().airliners.contains(planeValue)) {
 					sb1.append("fuelPercentage=" + (missionType.equals("bush") ? "100" : "50")).append(System.lineSeparator());
 				}
 				sb1.append("parkingBrake=100.00").append(System.lineSeparator());
@@ -4744,7 +4746,7 @@ public class BushMissionGen {
 				if (missionType.equals("land")) {
 					sb1.append("missionType=landing").append(System.lineSeparator());
 					sb1.append("challengeType=" + challengeType).append(System.lineSeparator());
-					if (SimData.airliners.contains(planeValue)) {
+					if (SimData.getInstance().airliners.contains(planeValue)) {
 						sb1.append("velocity=270").append(System.lineSeparator());
 					} else {
 						sb1.append("velocity=100").append(System.lineSeparator());

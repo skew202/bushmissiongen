@@ -231,7 +231,7 @@ public class GUI extends JFrame implements ActionListener {
 			WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
 			Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
 		} else if (e.getSource()==mShowPlanesItem) {
-			String planesText = SimData.getPlanes();
+			String planesText = SimData.getInstance().getPlanes();
 			mTextArea.setText(planesText);
 			mTextArea.setCaretPosition(0);
 		} else if (e.getSource()==mConvertItem) {

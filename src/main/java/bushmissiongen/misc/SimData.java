@@ -15,7 +15,12 @@ import bushmissiongen.BushMissionGen;
 import bushmissiongen.entries.MetaEntry;
 
 public class SimData {
+	private static SimData instance = null;
+
 	public static final String THIRD_PARTY_PLANE = "Third party vehicle";
+
+	public static Object[] missionTypeList = {"Bush trip", "Landing challenge"};
+	public static Object[] challengeTypeList = {"Famous", "Epic", "StrongWind"};
 
 	public static String[] weatherTypes = new String[] {
 			"custom - use the Weather.WPR file",
@@ -31,7 +36,7 @@ public class SimData {
 			".\\WeatherPresets\\Storm.WPR"
 	};
 
-	public static String[] planes = new String[] {
+	public String[] planes = new String[] {
 			"Airbus A320 Neo Asobo",
 			"Asobo Savage Cub",
 			"Asobo XCub",
@@ -54,18 +59,23 @@ public class SimData {
 			"VL3 Asobo"
 	};
 
-	public static List<String> encryptedOfficial = new ArrayList<>();
+	public List<String> encryptedOfficial = new ArrayList<>();
 
-	public static List<String> airliners = new ArrayList<>();
+	public List<String> airliners = new ArrayList<>();
 
-	public static List<String> systemsList = new ArrayList<>();
+	public List<String> systemsList = new ArrayList<>();
 
-	public static Map<String, String> systemToFailureCodeMap = new HashMap<>();
+	public Map<String, String> systemToFailureCodeMap = new HashMap<>();
 
-	public static Object[] missionTypeList = {"Bush trip", "Landing challenge"};
-	public static Object[] challengeTypeList = {"Famous", "Epic", "StrongWind"};
+	public static SimData getInstance() {
+		if (instance == null) {
+			instance = new SimData();
+		}
 
-	public SimData() {
+		return instance;
+	}
+
+	private SimData() {
 		// Deluxe
 		encryptedOfficial.add("Asobo Baron G58");
 		encryptedOfficial.add("Cessna 152 Aero Asobo");
@@ -192,7 +202,7 @@ public class SimData {
 		systemToFailureCodeMap.put("VSIGauge", "B877841ED460654AAC060D81AA4A1A57");
 	}
 
-	public static String[] getPaths() {
+	public String[] getPaths() {
 		String appDataLocal = System.getProperty("user.home") + File.separator + "AppData\\Local";
 		String appDataRoaming = System.getProperty("user.home") + File.separator + "AppData\\Roaming";
 		List<String> userCfgDirs = new ArrayList<>();
@@ -227,7 +237,7 @@ public class SimData {
 		return null;
 	}
 
-	private static String findPackagesPath(File f) {
+	private String findPackagesPath(File f) {
 		String foundPath = null;
 		Scanner in = null;
 		try {
@@ -251,7 +261,7 @@ public class SimData {
 		return foundPath;
 	}
 
-	public static String getPlanes() {
+	public String getPlanes() {
 		StringBuffer sb = new StringBuffer();		
 
 		if (BushMissionGen.COMMUNITY_DIR != null) {
@@ -301,7 +311,7 @@ public class SimData {
 		return sb.toString();
 	}
 
-	private static void scan(File dir, List<String> planeList) {
+	private void scan(File dir, List<String> planeList) {
 		File[] list = dir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
@@ -322,7 +332,7 @@ public class SimData {
 		}
 	}
 
-	private static List<String> findPlanes(File f) {
+	private List<String> findPlanes(File f) {
 		List<String> result = new ArrayList<>();
 		String firstFind = "[FLTSIM.";
 		boolean foundFirstFind = false;
@@ -366,7 +376,7 @@ public class SimData {
 		return result;
 	}
 
-	public static PlaneData getPlaneData(MetaEntry metaEntry) {
+	public PlaneData getPlaneData(MetaEntry metaEntry) {
 		String plane = metaEntry.plane;
 		boolean landing = metaEntry.missionType.equals("land");
 
