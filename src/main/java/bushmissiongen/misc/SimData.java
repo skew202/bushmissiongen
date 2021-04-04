@@ -91,6 +91,7 @@ public class SimData {
 		encryptedOfficial.add("Savage Shock Ultra Asobo");
 
 		airliners.add("Airbus A320 Neo Asobo");
+		airliners.add("Airbus A320 Neo FlyByWire");
 		airliners.add("Boeing 747-8i Asobo");
 		airliners.add("Boeing 787-10 Asobo");
 
