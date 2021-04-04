@@ -62,10 +62,10 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "1.85";
+	public static final String VERSION = "1.86";
 
 	// NEWS
-	// - Bug fix for time triggered failures.
+	// - 
 
 	// TO DO
 	// - What is the Overview.htm file used for in landing challenges?
@@ -4706,7 +4706,7 @@ public class BushMissionGen {
 				sb1.append("#").append(System.lineSeparator());
 				sb1.append("# Auto-generated in v").append(VERSION).append(System.lineSeparator());
 				sb1.append(System.lineSeparator());
-				sb1.append("author=unknown").append(System.lineSeparator());
+				sb1.append("author=" + authorValue).append(System.lineSeparator());
 				sb1.append("title=" + titleValue).append(System.lineSeparator());
 				sb1.append("project=" + projectValue).append(System.lineSeparator());
 				sb1.append("version=1.0.0").append(System.lineSeparator());
@@ -4737,7 +4737,7 @@ public class BushMissionGen {
 				sb1.append("altitude=" + metaEntry.alt).append(System.lineSeparator());
 				sb1.append("pitch=0").append(System.lineSeparator());
 				sb1.append("bank=0").append(System.lineSeparator());
-				sb1.append("heading=" + metaEntry.heading).append(System.lineSeparator());
+				sb1.append("heading=" + headingValue).append(System.lineSeparator());
 				sb1.append("weather=" + weatherValue).append(System.lineSeparator());
 				sb1.append("season=Summer").append(System.lineSeparator());
 				sb1.append("year=2018").append(System.lineSeparator());
