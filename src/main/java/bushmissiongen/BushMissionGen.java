@@ -62,12 +62,10 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "1.84";
+	public static final String VERSION = "1.85";
 
 	// NEWS
-	// - Updates extras files by cptdev!
-	// - Bug fix if the user had Java 8 installed.
-	// - Small updates.
+	// - Bug fix for time triggered failures.
 
 	// TO DO
 	// - What is the Overview.htm file used for in landing challenges?
@@ -703,7 +701,12 @@ public class BushMissionGen {
 						}
 
 						if (!system.isEmpty()) {
-							boolean wasFound = SimData.getInstance().systemsList.contains(system);
+							boolean wasFound = false;
+							if (feMode.equals(FailureEntryMode.ARM)) {
+								wasFound = SimData.getInstance().systemToFailureCodeMap.containsKey(system);
+							} else {
+								wasFound = SimData.getInstance().systemsList.contains(system);
+							}
 
 							if (wasFound) {
 								FailureEntry fe = new FailureEntry(metaName, "Failure", value.trim(), system, subIndex, exit, feMode);
