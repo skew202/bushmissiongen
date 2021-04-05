@@ -62,7 +62,7 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "1.86";
+	public static final String VERSION = "1.87";
 
 	// NEWS
 	// - 
@@ -71,8 +71,6 @@ public class BushMissionGen {
 	// - What is the Overview.htm file used for in landing challenges?
 	// - Leaderboards for landing challenges? Possible for 3rd party missions?
 	// - Is there the possibility of setting the flight departure at the parking area instead of on the runway (leg 2-X)?
-	// - maybe put the name of the plane in the 2nd page... prefilled if builtin aircraft used, empty else
-	//   and a little text box that says the names of common ones (FBW and the CRJ at least as they are very famous),
 
 	private static final int META_REQUIRED_ITEMS = 20;
 	private static final int META_SPLIT_LEN = 2;
