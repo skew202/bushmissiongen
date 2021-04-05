@@ -11,8 +11,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -28,6 +30,7 @@ public class TitlePage extends AbstractWizardPage {
 
 	private final JTextArea authorField = new JTextArea(1, 30);
 	private final JTextArea titleField = new JTextArea(1, 30);
+	private final JTextArea descriptionField = new JTextArea(1, 30);
 	private final JTextArea projectField = new JTextArea(1, 30);
 	private final JTextArea locationField = new JTextArea(1, 30);
 	private final JTextArea introField = new JTextArea(5,30);
@@ -41,6 +44,8 @@ public class TitlePage extends AbstractWizardPage {
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
+
+		Border border = BorderFactory.createLineBorder(Color.LIGHT_GRAY);
 
 		int currentRow = 0;
 
@@ -56,6 +61,7 @@ public class TitlePage extends AbstractWizardPage {
 		c.gridx = 1;
 		c.gridy = currentRow++;
 		c.anchor=GridBagConstraints.EAST;
+		authorField.setBorder(border);
 		add(authorField, c);
 
 		c.weightx = 0.10;
@@ -66,7 +72,19 @@ public class TitlePage extends AbstractWizardPage {
 		c.gridx = 1;
 		c.gridy = currentRow++;
 		c.anchor=GridBagConstraints.EAST;
+		titleField.setBorder(border);
 		add(titleField, c);
+
+		c.weightx = 0.10;
+		c.gridx = 0;
+		c.gridy = currentRow;
+		add(new Label("Description:"), c);
+		c.weightx = 0.5;
+		c.gridx = 1;
+		c.gridy = currentRow++;
+		c.anchor=GridBagConstraints.EAST;
+		descriptionField.setBorder(border);
+		add(descriptionField, c);
 
 		c.weightx = 0.10;
 		c.gridx = 0;
@@ -76,6 +94,7 @@ public class TitlePage extends AbstractWizardPage {
 		c.gridx = 1;
 		c.gridy = currentRow++;
 		c.anchor=GridBagConstraints.EAST;
+		projectField.setBorder(border);
 		add(projectField, c);
 
 		c.weightx = 0.10;
@@ -86,6 +105,7 @@ public class TitlePage extends AbstractWizardPage {
 		c.gridx = 1;
 		c.gridy = currentRow++;
 		c.anchor=GridBagConstraints.EAST;
+		locationField.setBorder(border);
 		add(locationField, c);
 
 		c.weightx = 0.10;
@@ -96,6 +116,7 @@ public class TitlePage extends AbstractWizardPage {
 		c.gridx = 1;
 		c.gridy = currentRow++;
 		c.anchor=GridBagConstraints.EAST;
+		headingField.setBorder(border);
 		add(headingField, c);
 
 		c.weightx = 0.10;
@@ -110,6 +131,7 @@ public class TitlePage extends AbstractWizardPage {
 		c.fill=GridBagConstraints.HORIZONTAL|GridBagConstraints.VERTICAL;
 		c.anchor=GridBagConstraints.EAST;
 		introField.setSize(introField.getPreferredSize());
+		introField.setBorder(border);
 		add(introField, c);
 
 		c.weightx = 0.10;
@@ -126,6 +148,8 @@ public class TitlePage extends AbstractWizardPage {
 		planesList.add(SimData.THIRD_PARTY_PLANE);
 		planeCombo = new JComboBox<String>(planesList.toArray(new String[planesList.size()]));
 		planeCombo.setSize(planeCombo.getPreferredSize());
+		planeCombo.setEditable(true);
+		planeCombo.setBorder(border);
 		add(planeCombo, c);
 
 		c.weightx = 0.10;
@@ -139,6 +163,7 @@ public class TitlePage extends AbstractWizardPage {
 		c.anchor=GridBagConstraints.EAST;
 		weatherCombo = new JComboBox<String>(SimData.weatherTypes);
 		weatherCombo.setSize(weatherCombo.getPreferredSize());
+		weatherCombo.setBorder(border);
 		add(weatherCombo, c);
 
 		DocumentListener dl = new DocumentListener() {
@@ -170,11 +195,12 @@ public class TitlePage extends AbstractWizardPage {
 	protected AbstractWizardPage getNextPage() {
 		values.put("author", authorField.getText().trim());
 		values.put("title", titleField.getText().trim());
+		values.put("description", descriptionField.getText().trim());
 		values.put("project", projectField.getText().trim());
 		values.put("location", locationField.getText().trim());
 		values.put("heading", headingField.getText().trim());
 		values.put("intro", introField.getText().trim());
-		values.put("plane", planeCombo.getItemAt(planeCombo.getSelectedIndex()));
+		values.put("plane", (String)planeCombo.getEditor().getItem());
 		values.put("weather", weatherCombo.getItemAt(weatherCombo.getSelectedIndex()));
 		return nextPage;
 	}
@@ -196,7 +222,7 @@ public class TitlePage extends AbstractWizardPage {
 			Pattern pattern = Pattern.compile("^[a-z0-9]+(-[a-z0-9]+){1,}$");
 			Matcher matcher = pattern.matcher(projectField.getText());
 			if (!matcher.find()) {
-				projectField.setBackground(Color.RED);
+				projectField.setBorder(BorderFactory.createLineBorder(Color.RED));
 				projectField.setToolTipText("Project names must be in the form 'aaa-bbb-...-xxx' and only contain lower case letters or digits.");
 				return false;
 			}
@@ -206,14 +232,14 @@ public class TitlePage extends AbstractWizardPage {
 			Pattern pattern = Pattern.compile("^[0-9]+$");
 			Matcher matcher = pattern.matcher(headingField.getText());
 			if (!matcher.find()) {
-				headingField.setBackground(Color.RED);
+				headingField.setBorder(BorderFactory.createLineBorder(Color.RED));
 				headingField.setToolTipText("Must be a valid number! Leave empty for 0 degrees.");
 				return false;
 			}
 		}
 
-		projectField.setBackground(Color.WHITE);
-		headingField.setBackground(Color.WHITE);
+		projectField.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+		headingField.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		projectField.setToolTipText("");
 		headingField.setToolTipText("");
 

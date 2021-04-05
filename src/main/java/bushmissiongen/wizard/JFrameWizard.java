@@ -22,7 +22,7 @@ import javax.swing.JSeparator;
 public class JFrameWizard extends JDialog implements IWizard {
 	private static final long serialVersionUID = 2818290889333414291L;
 
-	private static final Dimension defaultminimumSize = new Dimension(500, 500);
+	private static final Dimension defaultMinimumSize = new Dimension(500, 500);
 
 	private final JPanel wizardPageContainer = new JPanel(new GridLayout(1, 1));
 	private final JButton cancelButton = new JButton("Cancel");
@@ -41,12 +41,12 @@ public class JFrameWizard extends JDialog implements IWizard {
 		setupComponents();
 		layoutComponents();
 
-		setMinimumSize(defaultminimumSize);
+		setMinimumSize(defaultMinimumSize);
 
 		// Center on screen
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int xPosition = (screenSize.width / 2) - (defaultminimumSize.width / 2);
-		int yPosition = (screenSize.height / 2) - (defaultminimumSize.height / 2);
+		int xPosition = (screenSize.width / 2) - (defaultMinimumSize.width / 2);
+		int yPosition = (screenSize.height / 2) - (defaultMinimumSize.height / 2);
 		setLocation(xPosition, yPosition);
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

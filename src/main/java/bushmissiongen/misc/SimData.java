@@ -17,7 +17,7 @@ import bushmissiongen.entries.MetaEntry;
 public class SimData {
 	private static SimData instance = null;
 
-	public static final String THIRD_PARTY_PLANE = "Third party vehicle";
+	public static final String THIRD_PARTY_PLANE = "Third party (just edit the text!)";
 
 	public static Object[] missionTypeList = {"Bush trip", "Landing challenge"};
 	public static Object[] challengeTypeList = {"Famous", "Epic", "StrongWind"};

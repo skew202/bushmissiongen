@@ -71,7 +71,8 @@ public class BushMissionGen {
 	// - What is the Overview.htm file used for in landing challenges?
 	// - Leaderboards for landing challenges? Possible for 3rd party missions?
 	// - Is there the possibility of setting the flight departure at the parking area instead of on the runway (leg 2-X)?
-	// - Add 2 columns in the spreadsheet. One for an image name, the other for the image size, for each POI.
+	// - maybe put the name of the plane in the 2nd page... prefilled if builtin aircraft used, empty else
+	//   and a little text box that says the names of common ones (FBW and the CRJ at least as they are very famous),
 
 	private static final int META_REQUIRED_ITEMS = 20;
 	private static final int META_SPLIT_LEN = 2;
@@ -4651,6 +4652,15 @@ public class BushMissionGen {
 					titleValue = list.get(0).id + " to " + list.get(list.size()-1).id;
 				}
 
+				String descriptionValue = values.get("description");
+				if (descriptionValue.isEmpty()) {
+					descriptionValue = titleValue;
+					if (departureName != null && destinationName != null) {
+						descriptionValue = departureName + " to " + destinationName;
+					}
+					descriptionValue = descriptionValue.trim();
+				}
+
 				String projectValue = values.get("project");
 				if (projectValue.isEmpty()) {
 					projectValue = "unknown-" + missionType + "-generated";
@@ -4675,16 +4685,16 @@ public class BushMissionGen {
 					introValue = "Welcome!";
 				}
 
-				String description = titleValue;
-				if (departureName != null && destinationName != null) {
-					description = departureName + " to " + destinationName;
-				}
-				String descriptionValue = description.trim();
-
 				String planeValue = values.get("plane");
+				System.out.println(planeValue);
 				if (planeValue.equals(SimData.THIRD_PARTY_PLANE)) {
 					while (true) {
 						planeValue = JOptionPane.showInputDialog(null, "Write the correct name of the plane.", "3rd party vehicle", JOptionPane.INFORMATION_MESSAGE);
+
+						// Cancel?
+						if (planeValue == null) {
+							return null;
+						}
 
 						// Must be non-empty string
 						if (!planeValue.trim().isEmpty()) {
