@@ -67,6 +67,8 @@ public class SimData {
 
 	public Map<String, String> systemToFailureCodeMap = new HashMap<>();
 
+	public List<String> seasons = new ArrayList<>();
+
 	public static SimData getInstance() {
 		if (instance == null) {
 			instance = new SimData();
@@ -201,6 +203,11 @@ public class SimData {
 		systemToFailureCodeMap.put("CompassGauge", "DD4CC891F18BE04AB46BD2702DA4D460");
 		systemToFailureCodeMap.put("TurncoordGauge", "61A7C72937FD9F4AB0607041F1AE0561");
 		systemToFailureCodeMap.put("VSIGauge", "B877841ED460654AAC060D81AA4A1A57");
+
+		seasons.add("Winter");
+		seasons.add("Spring");
+		seasons.add("Summer");
+		seasons.add("Fall");
 	}
 
 	public String[] getPaths() {

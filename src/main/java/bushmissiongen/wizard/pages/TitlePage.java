@@ -23,8 +23,8 @@ import bushmissiongen.wizard.AbstractWizardPage;
 
 @SuppressWarnings("serial")
 public class TitlePage extends AbstractWizardPage {
-
 	private final AbstractWizardPage nextPage;
+
 	@SuppressWarnings("unused")
 	private Map<String, String> mDefaultValues;
 
@@ -40,7 +40,7 @@ public class TitlePage extends AbstractWizardPage {
 
 	public TitlePage(Map<String, String> defaultValues) {
 		mDefaultValues = defaultValues;
-		nextPage = new EndPage(defaultValues);
+		nextPage = new SecondPage(defaultValues);
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
