@@ -7,11 +7,11 @@ https://flightsim.to/file/3681/bushmissiongen#
 
 # Development
 
-Eclipse 2020-12 is the preferred IDE for developing BMG.
+Eclipse 2021-03 is the preferred IDE for developing BMG.
 
 ### Required downloads and installation
 
-https://www.eclipse.org/downloads/packages/release/2020-12/r/eclipse-ide-rcp-and-rap-developers<br>
+https://www.eclipse.org/downloads/packages/release/2021-03/r/eclipse-ide-rcp-and-rap-developers<br>
 https://www.oracle.com/java/technologies/javase-jdk15-downloads.html<br>
 https://maven.apache.org/download.cgi<br>
 
