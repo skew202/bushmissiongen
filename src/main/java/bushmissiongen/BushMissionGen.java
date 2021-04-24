@@ -63,10 +63,10 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "1.87";
+	public static final String VERSION = "1.88";
 
 	// NEWS
-	// - Instead of only the values True/False, a list of comma-separated triggers can be specified when using the fields deactivateDialogsAtStart, deactivateWarningsAtStart, deactivateFailuresAtStart and deactivateMissionFailuresAtStart.
+	// - Localization has been added for Japanese and Dutch.
 	// - 
 
 	// TO DO
