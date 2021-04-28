@@ -97,6 +97,7 @@ public class MetaEntry extends GenericEntry {
 
 	// Optional
 	public String navlogImageSize = "";
+	public String navlogImageFormat = "png";
 	public String sdkPath = "";
 	public String uniqueApImages = "";
 	public String poiSpeech = "";

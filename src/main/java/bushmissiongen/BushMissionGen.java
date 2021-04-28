@@ -66,6 +66,7 @@ public class BushMissionGen {
 	public static final String VERSION = "1.89";
 
 	// NEWS
+	// - Added an optional field to set the format of navlog/POI images (navlogImageFormat=png/jpg).
 	// - 
 
 	// TO DO
@@ -319,6 +320,21 @@ public class BushMissionGen {
 							}
 						} else {
 							return new ErrorMessage("Wrong format for navlogImageSize:\n\n" + line);
+						}
+					}
+					if (metaField.equalsIgnoreCase("navlogImageFormat")) {
+						String value = metaString.trim();
+						boolean formatError = false;
+
+						Pattern pattern = Pattern.compile("^(png|jpg)$");
+						boolean res1 = pattern.matcher(value).find();
+						if (!res1) formatError = true;
+
+						if (!formatError) metaEntry.navlogImageFormat = value;
+
+						// Error?
+						if (formatError) {
+							return new ErrorMessage("Wrong format for navlogImageFormat:\n\n" + line);
 						}
 					}
 					if (metaField.equalsIgnoreCase("sdkPath")) {metaEntry.sdkPath = metaString.trim();}
@@ -1455,12 +1471,12 @@ public class BushMissionGen {
 		}
 
 		// Image sizes
-		int pngWidth = 1200;
-		int pngHeight = 800;
+		int poiWidth = 1200;
+		int poiHeight = 800;
 		if (!metaEntry.navlogImageSize.isEmpty()) {
 			String[] split = metaEntry.navlogImageSize.split("#");
-			pngWidth = Integer.parseInt(split[0]);
-			pngHeight = Integer.parseInt(split[1]);
+			poiWidth = Integer.parseInt(split[0]);
+			poiHeight = Integer.parseInt(split[1]);
 		}
 
 		// Image creation
@@ -1476,14 +1492,15 @@ public class BushMissionGen {
 							id = entry.uniqueId;
 						}
 
-						String imageFile = imagesPath + File.separator + id;
-						Message msgJPG = mImageHandling.generateImage(new File(imageFile + ".jpg"), 1920, 1080, "jpg", "LEG - " + entry.id, Font.PLAIN, 1.0d);
+						String jpgFile = imagesPath + File.separator + id;
+						String poiFile = imagesPath + File.separator + id + "_POI";
+						Message msgJPG = mImageHandling.generateImage(new File(jpgFile + ".jpg"), 1920, 1080, "jpg", "LEG - " + entry.id, Font.PLAIN, 1.0d);
 						if (msgJPG != null) {
 							return msgJPG;
 						}
-						Message msgPNG = mImageHandling.generateImage(new File(imageFile + ".png"), pngWidth, pngHeight, "png", "NAVLOG - " + entry.id, Font.PLAIN, 1.0d);
-						if (msgPNG != null) {
-							return msgPNG;
+						Message msgPOI = mImageHandling.generateImage(new File(poiFile + "." + metaEntry.navlogImageFormat), poiWidth, poiHeight, metaEntry.navlogImageFormat, "NAVLOG - " + entry.id, Font.PLAIN, 1.0d);
+						if (msgPOI != null) {
+							return msgPOI;
 						}
 					}
 					count_ENTRY++;
@@ -1493,15 +1510,15 @@ public class BushMissionGen {
 							Pattern pattern = Pattern.compile("^(\\d+)x(\\d+)$");
 							Matcher matcher = pattern.matcher(entry.navlogImageSize);
 							if (matcher.find()) {
-								pngWidth = Integer.parseInt(matcher.group(1));
-								pngHeight = Integer.parseInt(matcher.group(2));
+								poiWidth = Integer.parseInt(matcher.group(1));
+								poiHeight = Integer.parseInt(matcher.group(2));
 							}
 						}
 
 						String imageFile = imagesPath + File.separator + entry.navlogImage;
-						Message msgPNG = mImageHandling.generateImage(new File(imageFile + ".png"), pngWidth, pngHeight, "png", entry.id, Font.PLAIN, 1.0d);
-						if (msgPNG != null) {
-							return msgPNG;
+						Message msgPOI = mImageHandling.generateImage(new File(imageFile + "." + metaEntry.navlogImageFormat), poiWidth, poiHeight, metaEntry.navlogImageFormat, entry.id, Font.PLAIN, 1.0d);
+						if (msgPOI != null) {
+							return msgPOI;
 						}
 					}
 				}
@@ -1533,15 +1550,19 @@ public class BushMissionGen {
 		if (mode == 1) {
 			// Did the user add POI images after generating??
 			if (mPOIs != null) {
-				Pattern patternPNG = Pattern.compile("^[P][O][I].*\\.[p][n][g]");
-				File[] outputPNGs = new File(imagesPath).listFiles(new FilenameFilter() {
+				String matchFormat = "[p][n][g]";
+				if (metaEntry.navlogImageFormat.equals("jpg")) {
+					matchFormat = "[j][p][g]";
+				}
+				Pattern patternPOI = Pattern.compile("^[P][O][I].*\\." + matchFormat);
+				File[] outputPOIs = new File(imagesPath).listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File dir, String name) {
-						Matcher matcherPNG = patternPNG.matcher(name);
-						return matcherPNG.find();
+						Matcher matcherPOI = patternPOI.matcher(name);
+						return matcherPOI.find();
 					}
 				});
-				if (outputPNGs.length != mPOIs.intValue()) {
+				if (outputPOIs.length != mPOIs.intValue()) {
 					return new ErrorMessage("New or deleted POI images have been detected!\n\nPlease generate you mission again and press Compile.");
 				}
 			}
@@ -1751,22 +1772,26 @@ public class BushMissionGen {
 		String XML_REGION = System.lineSeparator() +
 				"                <idRegion>##REGION##</idRegion>";
 		String XML_IMAGEPATH = System.lineSeparator() +
-				"              <ImagePath>images\\##AIRPORT_ID##.png</ImagePath>";
+				"              <ImagePath>images\\##AIRPORT_ID##_POI." + metaEntry.navlogImageFormat + "</ImagePath>";
 
 		// Copy POI images from project source folder if they exist.
 		File pathRootFile = new File(pathRoot);
-		Pattern patternPNG = Pattern.compile("^[P][O][I].*\\.[p][n][g]");
-		File[] rootPNGs = pathRootFile.listFiles(new FilenameFilter() {
+		String matchFormat = "[p][n][g]";
+		if (metaEntry.navlogImageFormat.equals("jpg")) {
+			matchFormat = "[j][p][g]";
+		}
+		Pattern patternPOI = Pattern.compile("^[P][O][I].*\\." + matchFormat);
+		File[] rootPOIs = pathRootFile.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				Matcher matcherPNG = patternPNG.matcher(name);
-				return matcherPNG.find();
+				Matcher matcherPOI = patternPOI.matcher(name);
+				return matcherPOI.find();
 			}
 		});
-		for (File rootPNG : rootPNGs) {
+		for (File rootPOI : rootPOIs) {
 			try {
-				Files.copy(new File(rootPNG.getAbsolutePath()).toPath(), 
-						new File(imagesPath + File.separator + rootPNG.getName()).toPath(),
+				Files.copy(new File(rootPOI.getAbsolutePath()).toPath(),
+						new File(imagesPath + File.separator + rootPOI.getName()).toPath(),
 						StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 			}
@@ -1991,7 +2016,7 @@ public class BushMissionGen {
 					Element td3 = tr.appendElement("td");
 					td3.attr("width", imageWidth);
 					Element image = td3.appendElement("image");
-					image.attr("src", "source" + File.separator + "images" + File.separator + id + ".png");
+					image.attr("src", "source" + File.separator + "images" + File.separator + id + "_POI." + metaEntry.navlogImageFormat);
 					image.attr("width", imageWidth);
 				}
 
@@ -2040,7 +2065,7 @@ public class BushMissionGen {
 				} else {
 					// Add subleg image if an image exists!
 					imageName = "POI" + multiCount(++count_POI, 0);
-					if (new File(imagesPath + File.separator + imageName + ".png").exists()) {
+					if (new File(imagesPath + File.separator + imageName + "." + metaEntry.navlogImageFormat).exists()) {
 						ss = ss.replace("##IMAGEPATH##", XML_IMAGEPATH.replace("##AIRPORT_ID##", imageName));
 						mPOIs++;
 					} else {
@@ -2077,9 +2102,9 @@ public class BushMissionGen {
 				Element td3 = tr.appendElement("td");
 				td3.attr("width", imageWidth);
 
-				if (new File(imagesPath + File.separator + imageName + ".png").exists()) {
+				if (new File(imagesPath + File.separator + imageName + "." + metaEntry.navlogImageFormat).exists()) {
 					Element image = td3.appendElement("image");
-					image.attr("src", "source" + File.separator + "images" + File.separator + imageName + ".png");
+					image.attr("src", "source" + File.separator + "images" + File.separator + imageName + "." + metaEntry.navlogImageFormat);
 					image.attr("width", imageWidth);
 				}
 
