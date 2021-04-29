@@ -58,7 +58,7 @@ public class FileHandling {
 			// Initial column count. Changes dynamically when waypoints or localizations are found.
 			int lastColumn = landing ? BushMissionGen.WP_LANDING_LEN : BushMissionGen.WP_EXTRA_SPLIT_LEN;
 
-			for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+			for (int rowNum = rowStart; rowNum <= rowEnd; rowNum++) {
 				Row r = firstSheet.getRow(rowNum);
 				if (r==null) {
 					continue;

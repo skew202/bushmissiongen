@@ -1471,12 +1471,12 @@ public class BushMissionGen {
 		}
 
 		// Image sizes
-		int poiWidth = 1200;
-		int poiHeight = 800;
+		int defaultPoiWidth = 1200;
+		int defaultPoiHeight = 800;
 		if (!metaEntry.navlogImageSize.isEmpty()) {
 			String[] split = metaEntry.navlogImageSize.split("#");
-			poiWidth = Integer.parseInt(split[0]);
-			poiHeight = Integer.parseInt(split[1]);
+			defaultPoiWidth = Integer.parseInt(split[0]);
+			defaultPoiHeight = Integer.parseInt(split[1]);
 		}
 
 		// Image creation
@@ -1498,25 +1498,42 @@ public class BushMissionGen {
 						if (msgJPG != null) {
 							return msgJPG;
 						}
-						Message msgPOI = mImageHandling.generateImage(new File(poiFile + "." + metaEntry.navlogImageFormat), poiWidth, poiHeight, metaEntry.navlogImageFormat, "NAVLOG - " + entry.id, Font.PLAIN, 1.0d);
+
+						int usePoiWidth = defaultPoiWidth;
+						int usePoiHeight = defaultPoiHeight;
+
+						if (!entry.navlogImageSize.isEmpty()) {
+							Pattern pattern = Pattern.compile("^(\\d+)x(\\d+)$");
+							Matcher matcher = pattern.matcher(entry.navlogImageSize);
+							if (matcher.find()) {
+								usePoiWidth = Integer.parseInt(matcher.group(1));
+								usePoiHeight = Integer.parseInt(matcher.group(2));
+							}
+						}
+
+
+						Message msgPOI = mImageHandling.generateImage(new File(poiFile + "." + metaEntry.navlogImageFormat), usePoiWidth, usePoiHeight, metaEntry.navlogImageFormat, "NAVLOG - " + entry.id, Font.PLAIN, 1.0d);
 						if (msgPOI != null) {
 							return msgPOI;
 						}
 					}
 					count_ENTRY++;
 				} else {
+					int usePoiWidth = defaultPoiWidth;
+					int usePoiHeight = defaultPoiHeight;
+
 					if (!entry.navlogImage.isEmpty()) {
 						if (!entry.navlogImageSize.isEmpty()) {
 							Pattern pattern = Pattern.compile("^(\\d+)x(\\d+)$");
 							Matcher matcher = pattern.matcher(entry.navlogImageSize);
 							if (matcher.find()) {
-								poiWidth = Integer.parseInt(matcher.group(1));
-								poiHeight = Integer.parseInt(matcher.group(2));
+								usePoiWidth = Integer.parseInt(matcher.group(1));
+								usePoiHeight = Integer.parseInt(matcher.group(2));
 							}
 						}
 
 						String imageFile = imagesPath + File.separator + entry.navlogImage;
-						Message msgPOI = mImageHandling.generateImage(new File(imageFile + "." + metaEntry.navlogImageFormat), poiWidth, poiHeight, metaEntry.navlogImageFormat, entry.id, Font.PLAIN, 1.0d);
+						Message msgPOI = mImageHandling.generateImage(new File(imageFile + "." + metaEntry.navlogImageFormat), usePoiWidth, usePoiHeight, metaEntry.navlogImageFormat, entry.id, Font.PLAIN, 1.0d);
 						if (msgPOI != null) {
 							return msgPOI;
 						}
