@@ -1789,7 +1789,7 @@ public class BushMissionGen {
 		String XML_REGION = System.lineSeparator() +
 				"                <idRegion>##REGION##</idRegion>";
 		String XML_IMAGEPATH = System.lineSeparator() +
-				"              <ImagePath>images\\##AIRPORT_ID##_POI." + metaEntry.navlogImageFormat + "</ImagePath>";
+				"              <ImagePath>images\\##AIRPORT_ID####POI_INDICATOR##." + metaEntry.navlogImageFormat + "</ImagePath>";
 
 		// Copy POI images from project source folder if they exist.
 		File pathRootFile = new File(pathRoot);
@@ -1847,7 +1847,8 @@ public class BushMissionGen {
 					}
 					String ss = XML_SUBLEG;
 					ss = ss.replace("##SUBLEG_DESCR##", entry.subLegTextID);
-					ss = ss.replace("##IMAGEPATH##", XML_IMAGEPATH.replace("##AIRPORT_ID##", id));
+					String poiIndicator = entry.navlogImage.isEmpty() ? "_POI" : "";
+					ss = ss.replace("##IMAGEPATH##", XML_IMAGEPATH.replace("##AIRPORT_ID##", id).replace("##POI_INDICATOR##", poiIndicator));
 					ss = ss.replace("##FROM_ID##", lastEntry.id);
 					ss = ss.replace("##TO_ID##", entry.id);
 					String fromRegion = XML_REGION;
@@ -2078,12 +2079,12 @@ public class BushMissionGen {
 				String imageName = "";
 				if (!entry.navlogImage.isEmpty()) {
 					imageName = entry.navlogImage;
-					ss = ss.replace("##IMAGEPATH##", XML_IMAGEPATH.replace("##AIRPORT_ID##", imageName));
+					ss = ss.replace("##IMAGEPATH##", XML_IMAGEPATH.replace("##AIRPORT_ID##", imageName).replace("##POI_INDICATOR##", ""));
 				} else {
 					// Add subleg image if an image exists!
 					imageName = "POI" + multiCount(++count_POI, 0);
 					if (new File(imagesPath + File.separator + imageName + "." + metaEntry.navlogImageFormat).exists()) {
-						ss = ss.replace("##IMAGEPATH##", XML_IMAGEPATH.replace("##AIRPORT_ID##", imageName));
+						ss = ss.replace("##IMAGEPATH##", XML_IMAGEPATH.replace("##AIRPORT_ID##", imageName).replace("##POI_INDICATOR##", ""));
 						mPOIs++;
 					} else {
 						ss = ss.replace("##IMAGEPATH##", "");
