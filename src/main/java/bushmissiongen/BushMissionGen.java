@@ -63,7 +63,7 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "1.89";
+	public static final String VERSION = "2.00";
 
 	// NEWS
 	// - Added an optional field to set the format of navlog/POI images (navlogImageFormat=png/jpg).
