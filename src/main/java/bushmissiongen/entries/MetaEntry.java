@@ -143,6 +143,7 @@ public class MetaEntry extends GenericEntry {
 	public List<MissionFailureEntry> missionFailures = new ArrayList<>();
 	public Map<String, List<DelayedText>> finishedEntries = new HashMap<>();
 	public List<LibraryObject> libraryObjects = new ArrayList<>();
+	public List<Landmark> landmarks = new ArrayList<>();
 
 	public Map<String, ToggleTrigger> toggleTriggers = new HashMap<>();
 	public Map<String, ToggleTrigger> counterToggleTriggers = new HashMap<>();

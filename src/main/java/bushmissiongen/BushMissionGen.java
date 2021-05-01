@@ -32,6 +32,7 @@ import org.jsoup.nodes.Element;
 import bushmissiongen.entries.DialogEntry;
 import bushmissiongen.entries.FailureEntry;
 import bushmissiongen.entries.FailureEntry.FailureEntryMode;
+import bushmissiongen.entries.Landmark;
 import bushmissiongen.entries.LibraryObject;
 import bushmissiongen.entries.MetaEntry;
 import bushmissiongen.entries.MissionEntry;
@@ -63,10 +64,9 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.00";
+	public static final String VERSION = "2.01";
 
 	// NEWS
-	// - Added an optional field to set the format of navlog/POI images (navlogImageFormat=png/jpg).
 	// - 
 
 	// TO DO
@@ -472,6 +472,14 @@ public class BushMissionGen {
 							return msgLO;
 						}
 						metaEntry.libraryObjects.add(lo);
+					}
+					if (metaField.startsWith("landmarkObject")) {
+						Landmark lm = new Landmark(metaName, metaField.trim(), metaString.trim());
+						Message msgLM = lm.handle();
+						if (msgLM != null) {
+							return msgLM;
+						}
+						metaEntry.landmarks.add(lm);
 					}
 					if (metaField.equalsIgnoreCase("activateTriggers") || metaField.equalsIgnoreCase("deactivateTriggers")) {
 						String[] splitTR = metaString.split("#");
@@ -1173,6 +1181,7 @@ public class BushMissionGen {
 		String recept_fileLOC = "##PATH_DIR##" + File.separator + "templates" + File.separator + "template.loc";
 		String recept_project = "##PATH_DIR##" + File.separator + "templates" + File.separator + "project.xml";
 		String recept_package = "##PATH_DIR##" + File.separator + "templates" + File.separator + "package.xml";
+		String recept_scene = "##PATH_DIR##" + File.separator + "templates" + File.separator + "scene.xml";
 		String recept_overview = "##PATH_DIR##" + File.separator + "templates" + File.separator + "Overview.htm";
 		String recept_weather = "##PATH_DIR##" + File.separator + "Weather.WPR";
 
@@ -1184,6 +1193,7 @@ public class BushMissionGen {
 				recept_fileLOC,
 				recept_project,
 				recept_package,
+				recept_scene,
 				recept_weather
 		};
 
@@ -1194,6 +1204,7 @@ public class BushMissionGen {
 				recept_fileLOC,
 				recept_project,
 				recept_package,
+				recept_scene,
 				recept_overview,
 				recept_weather
 		};
@@ -1202,11 +1213,13 @@ public class BushMissionGen {
 		if (recept_file.contains("\\samples\\")) {
 			projectPath = pathCurrent + File.separator + "output" + File.separator + metaEntry.project;
 		}
-		String packagesPath = projectPath + File.separator + "PackageDefinitions";
+		String packageDefinitionsPath = projectPath + File.separator + "PackageDefinitions";
+		String packageSourcesPath = projectPath + File.separator + "PackageSources";
 		String fourFilesPath = projectPath + File.separator + "source";
 		String imagesPath = fourFilesPath + File.separator + "images";
 		String soundPath = fourFilesPath + File.separator + "sound";
-		String contentInfoPath = packagesPath + File.separator + "ContentInfo";
+		String contentInfoPath = packageDefinitionsPath + File.separator + "ContentInfo";
+		String scenePath = packageSourcesPath + File.separator + "scene";
 		String compiledPath = projectPath + File.separator + "Packages";
 
 		if (mode >= 3 && mode <= 6) {
@@ -1222,7 +1235,8 @@ public class BushMissionGen {
 		String outFileLOC = fourFilesPath + File.separator + metaEntry.project + ".loc";
 		String outFileHTM = fourFilesPath + File.separator + "Overview.htm";
 		String outFileProject = projectPath + File.separator + metaEntry.project + "project.xml";
-		String outFilePackage = packagesPath + File.separator + metaEntry.project + ".xml";
+		String outFilePackage = packageDefinitionsPath + File.separator + metaEntry.project + ".xml";
+		String outFileScene = scenePath + File.separator + "objects.xml";
 		String outFilePreview = projectPath + File.separator + "preview.html";
 		String outFileJSON = projectPath + File.separator + "preview.geojson";
 
@@ -1261,7 +1275,8 @@ public class BushMissionGen {
 					recept_fileLOC = recept_files[4].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_project = recept_files[5].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_package = recept_files[6].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
-					recept_weather = recept_files[7].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_scene = recept_files[7].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_weather = recept_files[8].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 				} else {
 					recept_root = recept_files[0].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_fileXML = recept_files[1].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
@@ -1269,8 +1284,9 @@ public class BushMissionGen {
 					recept_fileLOC = recept_files[3].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_project = recept_files[4].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_package = recept_files[5].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
-					recept_overview = recept_files[6].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
-					recept_weather = recept_files[7].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_scene = recept_files[6].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_overview = recept_files[7].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_weather = recept_files[8].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 				}
 				break;
 			}
@@ -1410,11 +1426,17 @@ public class BushMissionGen {
 		File soundsDir = new File(soundPath);
 		soundsDir.mkdirs();
 
-		File packagesDir = new File(packagesPath);
-		packagesDir.mkdirs();
+		File packageDefinitionsDir = new File(packageDefinitionsPath);
+		packageDefinitionsDir.mkdirs();
+
+		File packageSourcesDir = new File(packageSourcesPath);
+		packageSourcesDir.mkdirs();
 
 		File contentInfoDir = new File(contentInfoPath);
 		contentInfoDir.mkdirs();
+
+		File sceneDir = new File(scenePath);
+		sceneDir.mkdirs();
 
 		mSounds = new HashSet<>();
 		mCopiedSounds = new HashSet<>();
@@ -1699,9 +1721,13 @@ public class BushMissionGen {
 		if (msgProject != null) {
 			return msgProject;
 		}
-		Message msgPackage = handlPackage(metaEntry, entries, recept_package, outFilePackage);
+		Message msgPackage = handlePackage(metaEntry, entries, recept_package, outFilePackage);
 		if (msgPackage != null) {
 			return msgPackage;
+		}
+		Message msgScene = handleScene(metaEntry, entries, recept_scene, outFileScene);
+		if (msgScene != null) {
+			return msgScene;
 		}
 
 		// Check if sound files are in the sound folder
@@ -3753,10 +3779,10 @@ public class BushMissionGen {
 		FLT_FILE = FLT_FILE.replace("##COPILOTS##", sbCP.toString());
 
 		// Assistance
-		if (metaEntry.enableAtc.isEmpty()) {
-			FLT_FILE = FLT_FILE.replace("##META_ASSISTANCE##", System.lineSeparator() + "Preset=ASSISTANCE_PRESET_BUSH_TRIP");
-		} else {
+		if (!metaEntry.enableAtc.isEmpty() || !metaEntry.landmarks.isEmpty()) {
 			FLT_FILE = FLT_FILE.replace("##META_ASSISTANCE##", "");
+		} else {
+			FLT_FILE = FLT_FILE.replace("##META_ASSISTANCE##", System.lineSeparator() + "Preset=ASSISTANCE_PRESET_BUSH_TRIP");
 		}
 
 		// Tooltips
@@ -4457,7 +4483,7 @@ public class BushMissionGen {
 		return null;
 	}
 
-	private Message handlPackage(MetaEntry metaEntry, List<MissionEntry> entries, String inFile, String outFile) {
+	private Message handlePackage(MetaEntry metaEntry, List<MissionEntry> entries, String inFile, String outFile) {
 		Charset cs = StandardCharsets.UTF_8;
 		String PACKAGE_FILE = mFileHandling.readFileToString(inFile, cs);
 
@@ -4465,6 +4491,29 @@ public class BushMissionGen {
 		PACKAGE_FILE = PACKAGE_FILE.replace("##META_AUTHOR##", metaEntry.author);
 		PACKAGE_FILE = PACKAGE_FILE.replace("##META_TITLE##", metaEntry.title);
 		PACKAGE_FILE = PACKAGE_FILE.replace("##META_VERSION##", metaEntry.version);
+
+		Message msg = mFileHandling.writeStringToFile(outFile, PACKAGE_FILE, cs);
+		if (msg != null) {
+			return msg;
+		}
+
+		return null;
+	}
+
+	private Message handleScene(MetaEntry metaEntry, List<MissionEntry> entries, String inFile, String outFile) {
+		Charset cs = StandardCharsets.UTF_8;
+		String PACKAGE_FILE = mFileHandling.readFileToString(inFile, cs);
+
+		StringBuffer landmarksSB = new StringBuffer();
+		int count = 0;
+		for (Landmark lm : metaEntry.landmarks) {
+			String refId = "206E4DAF-41DB-4198-B0A8-42094815D";
+			refId += String.format("%03d", (count++) + 1);
+			String rowTemplate = "    <LandmarkLocation offset=\"" + lm.offset + "\" alt=\"" + lm.altitude + "\" lon=\"" + lm.lon + "\" lat=\"" + lm.lat + "\" owner=\"" + metaEntry.author + "\" name=\"" + lm.value + "\" type=\"" + lm.type + "\" instanceId=\"{" + refId + "}\"/>";
+			landmarksSB.append(System.lineSeparator()).append(rowTemplate);
+		}
+
+		PACKAGE_FILE = PACKAGE_FILE.replace("##LANDMARKS##", landmarksSB.toString());
 
 		Message msg = mFileHandling.writeStringToFile(outFile, PACKAGE_FILE, cs);
 		if (msg != null) {

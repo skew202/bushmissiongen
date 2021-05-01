@@ -26,6 +26,14 @@
 			<AssetDir>source</AssetDir>
 			<OutputDir>Missions\##META_PROJECT##Dir</OutputDir>
 		</AssetGroup>
+		<AssetGroup Name="Scenery">
+			<Type>BGL</Type>
+			<Flags>
+				<FSXCompatibility>false</FSXCompatibility>
+			</Flags>
+			<AssetDir>PackageSources\scene</AssetDir>
+			<OutputDir>scenery</OutputDir>
+		</AssetGroup>
 	</AssetGroups>
 </AssetPackage>
 

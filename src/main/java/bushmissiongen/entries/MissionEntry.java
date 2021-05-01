@@ -229,6 +229,37 @@ public class MissionEntry extends GenericEntry {
 		return this.latlon.replace(" ", "");
 	}
 
+	public String[] getLatLongDeg(String latlong) {
+		Pattern pattern = Pattern.compile("^([NS])(\\d+)°\\s?(\\d+)'\\s?(\\d+|\\d+[.]\\d+)\",\\s?([WE])(\\d+)°\\s?(\\d+)'\\s?(\\d+|\\d+[.]\\d+)\"");
+		Matcher matcher = pattern.matcher(latlong);
+
+		if (matcher.find())
+		{
+			String latDegree = matcher.group(1);
+			double latDegrees = Integer.parseInt(matcher.group(2));
+			double latMinutes = Double.parseDouble(matcher.group(3));
+			double latSeconds = Double.parseDouble(matcher.group(4));
+
+			String longDegree = matcher.group(5);
+			double longDegrees = Integer.parseInt(matcher.group(6));
+			double longMinutes = Double.parseDouble(matcher.group(7));
+			double longSeconds = Double.parseDouble(matcher.group(8));
+
+			latDegrees += ((latMinutes * 60)+latSeconds) / (60*60);
+			longDegrees += ((longMinutes * 60)+longSeconds) / (60*60);
+
+			latDegrees = latDegree.equals("N") ? latDegrees : -1 * latDegrees;
+			longDegrees = longDegree.equals("E") ? longDegrees : -1 * longDegrees;
+
+			String latDegreesStr = String.valueOf(latDegrees);
+			String longDegreesStr = String.valueOf(longDegrees);
+
+			return new String[] {latDegreesStr, longDegreesStr};
+		}
+
+		return null;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
