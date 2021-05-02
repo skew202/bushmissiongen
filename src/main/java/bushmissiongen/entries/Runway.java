@@ -26,6 +26,10 @@ public class Runway {
 	public String lon2 = "";
 	public String surface = "";
 
+	private String latlon = "";
+	private String latlon1 = "";
+	private String latlon2 = "";
+
 	public Runway() {
 	}
 
@@ -39,124 +43,142 @@ public class Runway {
 		String[] split = mString.split("#");
 
 		// Coordinate validation
-		if (split.length == 11) {
+		if (split.length == 9) {
 			icao = split[0];
-			number = split[1];
-			String latlon = split[2];
-			altitude = split[3];
-			width = split[4];
-			length = split[5];
-			heading1 = split[6];
-			heading2 = split[7];
-			String latlon1 = split[8];
-			String latlon2 = split[9];
-			surface = split[10].toUpperCase();
-
-			// Coordinate transformation
-			{
-				MissionEntry meTest = new MissionEntry();
-				Message msgLatlon = meTest.setLatlon(latlon);
-				if (msgLatlon != null) {
-					return msgLatlon;
-				}
-				String[] latlonDegrees = meTest.getLatLongDeg(meTest.latlon);
-				if (latlonDegrees == null) {
-					return new ErrorMessage("Could not handle the coordinate: " + meTest.latlon);
-				}			
-
-				lat = latlonDegrees[0];
-				lon = latlonDegrees[1];
-			}
-			{
-				MissionEntry meTest = new MissionEntry();
-				Message msgLatlon = meTest.setLatlon(latlon1);
-				if (msgLatlon != null) {
-					return msgLatlon;
-				}
-				String[] latlonDegrees = meTest.getLatLongDeg(meTest.latlon);
-				if (latlonDegrees == null) {
-					return new ErrorMessage("Could not handle the coordinate: " + meTest.latlon);
-				}			
-
-				lat1 = latlonDegrees[0];
-				lon1 = latlonDegrees[1];
-			}
-			{
-				MissionEntry meTest = new MissionEntry();
-				Message msgLatlon = meTest.setLatlon(latlon2);
-				if (msgLatlon != null) {
-					return msgLatlon;
-				}
-				String[] latlonDegrees = meTest.getLatLongDeg(meTest.latlon);
-				if (latlonDegrees == null) {
-					return new ErrorMessage("Could not handle the coordinate: " + meTest.latlon);
-				}			
-
-				lat2 = latlonDegrees[0];
-				lon2 = latlonDegrees[1];
-			}
+			latlon = split[1];
+			altitude = split[2];
+			width = split[3];
+			length = split[4];
+			heading1 = split[5];
+			latlon1 = split[6];
+			latlon2 = split[7];
+			surface = split[8].toUpperCase();
 
 			Pattern pattern = Pattern.compile("^(\\d+\\.\\d{3})([A-Z]+)?$");
-			Matcher matcher1 = pattern.matcher(altitude);
-			if (matcher1.find()) {
-				altitude = matcher1.group(1);
+			Matcher matcher = pattern.matcher(heading1);
+			if (matcher.find()) {
+				heading1 = matcher.group(1);
 			} else {
 				return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
 			}
-			Matcher matcher2 = pattern.matcher(width);
-			if (matcher2.find()) {
-				width = matcher2.group(1);
-			} else {
-				return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+
+			double headingDBL1 = Double.parseDouble(heading1);
+			double headingDBL2 = headingDBL1+180.0;
+			if (headingDBL2>360.0) {
+				headingDBL2-= 360.0;
 			}
-			Matcher matcher3 = pattern.matcher(length);
-			if (matcher3.find()) {
-				length = matcher3.group(1);
-			} else {
-				return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			int numberINT = (int)(Math.round(headingDBL1/10.0));
+			if (numberINT == 0) {
+				numberINT += 36;
 			}
-			Matcher matcher4 = pattern.matcher(heading1);
-			if (matcher4.find()) {
-				heading1 = matcher4.group(1);
-			} else {
-				return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			number = String.valueOf(numberINT);
+			heading2 = String.valueOf(headingDBL2);
+		} else {
+			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+		}
+
+		// Coordinate transformation
+		{
+			MissionEntry meTest = new MissionEntry();
+			Message msgLatlon = meTest.setLatlon(latlon);
+			if (msgLatlon != null) {
+				return msgLatlon;
 			}
-			Matcher matcher5 = pattern.matcher(heading2);
-			if (matcher5.find()) {
-				heading2 = matcher5.group(1);
-			} else {
-				return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			String[] latlonDegrees = meTest.getLatLongDeg(meTest.latlon);
+			if (latlonDegrees == null) {
+				return new ErrorMessage("Could not handle the coordinate: " + meTest.latlon);
 			}
-			
-			String[] RUNWAY_SURFACES = new String[] {
-					"ASPHALT",
-					"BITUMINOUS",
-					"BRICK",
-					"CLAY",
-					"CEMENT",
-					"CONCRETE",
-					"CORAL",
-					"DIRT",
-					"GRASS",
-					"GRAVEL",
-					"ICE",
-					"MACADAM",
-					"OIL_TREATED, PLANKS",
-					"SAND",
-					"SHALE",
-					"SNOW",
-					"STEEL_MATS",
-					"TARMAC",
-					"UNKNOWN",
-					"WATER"
-			};
-			Pattern patternSURFACE = Pattern.compile("^(" + String.join("|", RUNWAY_SURFACES) + ")$");
-			Matcher matcherSURFACE = patternSURFACE.matcher(surface);
-			if (matcherSURFACE.find()) {
-				surface = matcherSURFACE.group(1);
-			} else {
-				return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+
+			lat = latlonDegrees[0];
+			lon = latlonDegrees[1];
+		}
+		{
+			MissionEntry meTest = new MissionEntry();
+			Message msgLatlon = meTest.setLatlon(latlon1);
+			if (msgLatlon != null) {
+				return msgLatlon;
 			}
+			String[] latlonDegrees = meTest.getLatLongDeg(meTest.latlon);
+			if (latlonDegrees == null) {
+				return new ErrorMessage("Could not handle the coordinate: " + meTest.latlon);
+			}
+
+			lat1 = latlonDegrees[0];
+			lon1 = latlonDegrees[1];
+		}
+		{
+			MissionEntry meTest = new MissionEntry();
+			Message msgLatlon = meTest.setLatlon(latlon2);
+			if (msgLatlon != null) {
+				return msgLatlon;
+			}
+			String[] latlonDegrees = meTest.getLatLongDeg(meTest.latlon);
+			if (latlonDegrees == null) {
+				return new ErrorMessage("Could not handle the coordinate: " + meTest.latlon);
+			}
+
+			lat2 = latlonDegrees[0];
+			lon2 = latlonDegrees[1];
+		}
+
+		Pattern pattern = Pattern.compile("^(\\d+\\.\\d{3})([A-Z]+)?$");
+		Matcher matcher1 = pattern.matcher(altitude);
+		if (matcher1.find()) {
+			altitude = matcher1.group(1);
+		} else {
+			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+		}
+		Matcher matcher2 = pattern.matcher(width);
+		if (matcher2.find()) {
+			width = matcher2.group(1);
+		} else {
+			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+		}
+		Matcher matcher3 = pattern.matcher(length);
+		if (matcher3.find()) {
+			length = matcher3.group(1);
+		} else {
+			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+		}
+		Matcher matcher4 = pattern.matcher(heading1);
+		if (matcher4.find()) {
+			heading1 = matcher4.group(1);
+		} else {
+			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+		}
+		Matcher matcher5 = pattern.matcher(heading2);
+		if (matcher5.find()) {
+			heading2 = matcher5.group(1);
+		} else {
+			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+		}
+
+		String[] RUNWAY_SURFACES = new String[] {
+				"ASPHALT",
+				"BITUMINOUS",
+				"BRICK",
+				"CLAY",
+				"CEMENT",
+				"CONCRETE",
+				"CORAL",
+				"DIRT",
+				"GRASS",
+				"GRAVEL",
+				"ICE",
+				"MACADAM",
+				"OIL_TREATED, PLANKS",
+				"SAND",
+				"SHALE",
+				"SNOW",
+				"STEEL_MATS",
+				"TARMAC",
+				"UNKNOWN",
+				"WATER"
+		};
+		Pattern patternSURFACE = Pattern.compile("^(" + String.join("|", RUNWAY_SURFACES) + ")$");
+		Matcher matcherSURFACE = patternSURFACE.matcher(surface);
+		if (matcherSURFACE.find()) {
+			surface = matcherSURFACE.group(1);
 		} else {
 			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
 		}
