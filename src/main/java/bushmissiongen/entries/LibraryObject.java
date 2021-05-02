@@ -48,7 +48,7 @@ public class LibraryObject {
 			boolean res2 = pattern1.matcher(heading).find();
 			boolean res3 = pattern1.matcher(scale).find();
 			if (!res2 || !res3) {
-				return new ErrorMessage("Wrong format for libraryObject:\n\n" + mField + "=" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 			}
 
 			Pattern pattern5 = Pattern.compile("^(\\d+\\.\\d{3})([A-Z]+)?$");
@@ -64,16 +64,16 @@ public class LibraryObject {
 					}
 				}
 			} else {
-				return new ErrorMessage("Wrong format for libraryObject:\n\n" + mField + "=" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 			}
 
 			if (split.length == 6) {
 				activated = split[5].trim();
 			} else if (split.length > 6) {
-				return new ErrorMessage("Wrong format for libraryObject:\n\n" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mString);
 			}
 		} else {
-			return new ErrorMessage("Wrong format for libraryObject:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 
 		// Coordinate transformation

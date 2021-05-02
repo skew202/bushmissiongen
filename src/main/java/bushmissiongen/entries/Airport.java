@@ -59,16 +59,16 @@ public class Airport {
 			if (matcher1.find()) {
 				altitude = matcher1.group(1);
 			} else {
-				return new ErrorMessage("Wrong format for addAirport:\n\n" + mField + "=" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 			}
 			Matcher matcher2 = pattern.matcher(radius);
 			if (matcher2.find()) {
 				radius = matcher2.group(1);
 			} else {
-				return new ErrorMessage("Wrong format for addAirport:\n\n" + mField + "=" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 			}
 		} else {
-			return new ErrorMessage("Wrong format for addAirport:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 
 		return null;

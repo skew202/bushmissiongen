@@ -57,13 +57,13 @@ public class Landmark {
 			if (matcher1.find()) {
 				altitude = matcher1.group(1);
 			} else {
-				return new ErrorMessage("Wrong format for landmarkPOI:\n\n" + mField + "=" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 			}
 			Matcher matcher2 = pattern.matcher(offset);
 			if (matcher2.find()) {
 				offset = matcher2.group(1);
 			} else {
-				return new ErrorMessage("Wrong format for landmarkPOI:\n\n" + mField + "=" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 			}
 
 			String[] LANDMARK_TYPES = new String[] {
@@ -76,10 +76,10 @@ public class Landmark {
 			if (matcher3.find()) {
 				type = matcher3.group(1);
 			} else {
-				return new ErrorMessage("Wrong format for landmarkPOI:\n\n" + mField + "=" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 			}
 		} else {
-			return new ErrorMessage("Wrong format for landmarkPOI:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 
 		return null;

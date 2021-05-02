@@ -25,6 +25,7 @@ public class Runway {
 	public String lat2 = "";
 	public String lon2 = "";
 	public String surface = "";
+	public String offset = "26.070";
 
 	private String latlon = "";
 	private String latlon1 = "";
@@ -43,7 +44,7 @@ public class Runway {
 		String[] split = mString.split("#");
 
 		// Coordinate validation
-		if (split.length == 9) {
+		if (split.length >= 9) {
 			icao = split[0];
 			latlon = split[1];
 			altitude = split[2];
@@ -53,13 +54,16 @@ public class Runway {
 			latlon1 = split[6];
 			latlon2 = split[7];
 			surface = split[8].toUpperCase();
+			if (split.length >= 10) {
+				offset = split[9];
+			}
 
 			Pattern pattern = Pattern.compile("^(\\d+\\.\\d{3})([A-Z]+)?$");
 			Matcher matcher = pattern.matcher(heading1);
 			if (matcher.find()) {
 				heading1 = matcher.group(1);
 			} else {
-				return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+				return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 			}
 
 			double headingDBL1 = Double.parseDouble(heading1);
@@ -74,7 +78,7 @@ public class Runway {
 			number = String.valueOf(numberINT);
 			heading2 = String.valueOf(headingDBL2);
 		} else {
-			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 
 		// Coordinate transformation
@@ -126,31 +130,37 @@ public class Runway {
 		if (matcher1.find()) {
 			altitude = matcher1.group(1);
 		} else {
-			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 		Matcher matcher2 = pattern.matcher(width);
 		if (matcher2.find()) {
 			width = matcher2.group(1);
 		} else {
-			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 		Matcher matcher3 = pattern.matcher(length);
 		if (matcher3.find()) {
 			length = matcher3.group(1);
 		} else {
-			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 		Matcher matcher4 = pattern.matcher(heading1);
 		if (matcher4.find()) {
 			heading1 = matcher4.group(1);
 		} else {
-			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 		Matcher matcher5 = pattern.matcher(heading2);
 		if (matcher5.find()) {
 			heading2 = matcher5.group(1);
 		} else {
-			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
+		}
+		Matcher matcher6 = pattern.matcher(offset);
+		if (matcher6.find()) {
+			offset = matcher6.group(1);
+		} else {
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 
 		String[] RUNWAY_SURFACES = new String[] {
@@ -180,7 +190,7 @@ public class Runway {
 		if (matcherSURFACE.find()) {
 			surface = matcherSURFACE.group(1);
 		} else {
-			return new ErrorMessage("Wrong format for addRunway:\n\n" + mField + "=" + mString);
+			return new ErrorMessage("Wrong format for " + mField + ":\n\n" + mField + "=" + mString);
 		}
 
 		return null;

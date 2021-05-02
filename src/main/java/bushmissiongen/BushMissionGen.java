@@ -4555,8 +4555,8 @@ public class BushMissionGen {
 			for (Runway rw : runways) {
 				sceneSB.append(System.lineSeparator()).append("        <Runway number=\"" + rw.number + "\"  lat=\"" + rw.lat + "\" lon=\"" + rw.lon + "\" alt=\"" + rw.altitude + "F\" width=\"" + rw.width + "F\" length=\"" + rw.length + "F\" heading=\"" + rw.heading1 + "\" primaryTakeoff=\"TRUE\" secondaryTakeoff=\"TRUE\" primaryLanding=\"TRUE\" secondaryLanding=\"TRUE\" surface=\"" + rw.surface + "\" transparent=\"FALSE\" groundMerging=\"FALSE\"><Markings ident=\"TRUE\" touchdown=\"FALSE\" alternateTouchdown=\"FALSE\" precision=\"FALSE\" alternatePrecision=\"FALSE\" threshold=\"TRUE\" alternateThreshold=\"FALSE\" fixedDistance=\"TRUE\" alternateFixedDistance=\"FALSE\" singleEnd=\"FALSE\" dashes=\"TRUE\" edges=\"TRUE\" edgePavement=\"FALSE\" noThresholdEndArrows=\"FALSE\" leadingZeroIdent=\"TRUE\" primaryStol=\"FALSE\" secondaryStol=\"FALSE\" primaryClosed=\"FALSE\" secondaryClosed=\"FALSE\" />");
 				sceneSB.append(System.lineSeparator()).append("            <Lights edge=\"HIGH\" center=\"NONE\" centerRed=\"FALSE\" />");
-				sceneSB.append(System.lineSeparator()).append("            <OffsetThreshold length=\"26.07F\" end=\"PRIMARY\" />");
-				sceneSB.append(System.lineSeparator()).append("            <OffsetThreshold length=\"26.07F\" end=\"SECONDARY\" />");
+				sceneSB.append(System.lineSeparator()).append("            <OffsetThreshold length=\"" + rw.offset + "F\" end=\"PRIMARY\" />");
+				sceneSB.append(System.lineSeparator()).append("            <OffsetThreshold length=\"" + rw.offset +"F\" end=\"SECONDARY\" />");
 				sceneSB.append(System.lineSeparator()).append("            <RunwayStart end=\"PRIMARY\" lat=\"" + rw.lat1 + "\" lon=\"" + rw.lon1 + "\" alt=\"0.00F\" heading=\"" + rw.heading1 + "\" />");
 				sceneSB.append(System.lineSeparator()).append("            <RunwayStart end=\"SECONDARY\" lat=\"" + rw.lat2 + "\" lon=\"" + rw.lon2 + "\" alt=\"0.00F\" heading=\"" + rw.heading2 +"\" />");
 				sceneSB.append(System.lineSeparator()).append("        </Runway>");
