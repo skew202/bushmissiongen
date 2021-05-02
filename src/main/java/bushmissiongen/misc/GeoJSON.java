@@ -49,10 +49,13 @@ public class GeoJSON {
 		mBuffer.append("}").append(System.lineSeparator());
 	}
 
-	public void appendLine(String fromLatLon, String toLatLon) {
+	public void appendLine(String fromLatLon, String toLatLon, String color, String width) {
 		mBuffer.append(mCount==0 ? "{" : ",{").append(System.lineSeparator());
 		mBuffer.append("\"type\": \"Feature\",").append(System.lineSeparator());
-		mBuffer.append("\"properties\": {},").append(System.lineSeparator());
+		mBuffer.append("\"properties\": {").append(System.lineSeparator());
+		mBuffer.append("\"stroke\": \"" + color + "\",").append(System.lineSeparator());
+		mBuffer.append("\"stroke-width\": " + width).append(System.lineSeparator());
+		mBuffer.append("},").append(System.lineSeparator());
 		mBuffer.append("\"geometry\": {").append(System.lineSeparator());
 		mBuffer.append("\"type\": \"LineString\",").append(System.lineSeparator());
 		mBuffer.append("\"coordinates\": [").append(System.lineSeparator());

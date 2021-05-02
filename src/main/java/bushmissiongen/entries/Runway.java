@@ -27,9 +27,9 @@ public class Runway {
 	public String surface = "";
 	public String offset = "26.070";
 
-	private String latlon = "";
-	private String latlon1 = "";
-	private String latlon2 = "";
+	public String latlon = "";
+	public String latlon1 = "";
+	public String latlon2 = "";
 
 	public Runway() {
 	}
@@ -102,6 +102,7 @@ public class Runway {
 			if (msgLatlon != null) {
 				return msgLatlon;
 			}
+			latlon1 = meTest.latlon;
 			String[] latlonDegrees = meTest.getLatLongDeg(meTest.latlon);
 			if (latlonDegrees == null) {
 				return new ErrorMessage("Could not handle the coordinate: " + meTest.latlon);
@@ -116,6 +117,7 @@ public class Runway {
 			if (msgLatlon != null) {
 				return msgLatlon;
 			}
+			latlon2 = meTest.latlon;
 			String[] latlonDegrees = meTest.getLatLongDeg(meTest.latlon);
 			if (latlonDegrees == null) {
 				return new ErrorMessage("Could not handle the coordinate: " + meTest.latlon);

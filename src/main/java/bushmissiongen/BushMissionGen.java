@@ -1723,13 +1723,6 @@ public class BushMissionGen {
 				return msg;
 			}
 			mSavedPreviewFile = outFilePreview;
-
-			// JSON
-			mGeoJSON.finish();
-			Message msgJSON = mFileHandling.writeStringToFile(outFileJSON, mGeoJSON.toString(), cs);
-			if (msgJSON != null) {
-				return msgJSON;
-			}
 		} else {
 			Message msgXML = handleLandXML(metaEntry, entries, recept_fileXML, outFileXML);
 			if (msgXML != null) {
@@ -1756,6 +1749,14 @@ public class BushMissionGen {
 		Message msgScene = handleScene(metaEntry, entries, recept_scene, outFileScene);
 		if (msgScene != null) {
 			return msgScene;
+		}
+
+		// JSON
+		mGeoJSON.finish();
+		Charset cs = StandardCharsets.UTF_8;
+		Message msgJSON = mFileHandling.writeStringToFile(outFileJSON, mGeoJSON.toString(), cs);
+		if (msgJSON != null) {
+			return msgJSON;
 		}
 
 		// Check if sound files are in the sound folder
@@ -1924,7 +1925,7 @@ public class BushMissionGen {
 					sb.append(System.lineSeparator());
 
 					// JSON
-					mGeoJSON.appendLine(lastEntry.latlon, entry.latlon);
+					mGeoJSON.appendLine(lastEntry.latlon, entry.latlon, "#575757", "2");
 
 					string_CURRENTLEG = "";
 					list_subLegs.clear();
@@ -2184,7 +2185,7 @@ public class BushMissionGen {
 
 				// JSON
 				mGeoJSON.appendPoint(entry.latlon, "#000000");
-				mGeoJSON.appendLine(lastEntry.latlon, entry.latlon);
+				mGeoJSON.appendLine(lastEntry.latlon, entry.latlon, "#575757", "2");
 			}
 			count_ENTRY++;
 			lastEntry = entry;			
@@ -4560,6 +4561,8 @@ public class BushMissionGen {
 				sceneSB.append(System.lineSeparator()).append("            <RunwayStart end=\"PRIMARY\" lat=\"" + rw.lat1 + "\" lon=\"" + rw.lon1 + "\" alt=\"0.00F\" heading=\"" + rw.heading1 + "\" />");
 				sceneSB.append(System.lineSeparator()).append("            <RunwayStart end=\"SECONDARY\" lat=\"" + rw.lat2 + "\" lon=\"" + rw.lon2 + "\" alt=\"0.00F\" heading=\"" + rw.heading2 +"\" />");
 				sceneSB.append(System.lineSeparator()).append("        </Runway>");
+
+				mGeoJSON.appendLine(rw.latlon1, rw.latlon2, "#1313ee", "8");
 			}
 
 			sceneSB.append(System.lineSeparator()).append(rowTemplate2);
