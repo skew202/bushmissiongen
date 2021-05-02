@@ -29,6 +29,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import bushmissiongen.entries.Airport;
 import bushmissiongen.entries.DialogEntry;
 import bushmissiongen.entries.FailureEntry;
 import bushmissiongen.entries.FailureEntry.FailureEntryMode;
@@ -39,6 +40,7 @@ import bushmissiongen.entries.MissionEntry;
 import bushmissiongen.entries.MissionEntry.WpType;
 import bushmissiongen.entries.MissionFailureEntry;
 import bushmissiongen.entries.MissionFailureEntry.MissionFailureEntryMode;
+import bushmissiongen.entries.Runway;
 import bushmissiongen.entries.WarningEntry;
 import bushmissiongen.entries.WarningEntry.WarningEntryMode;
 import bushmissiongen.handling.FileHandling;
@@ -64,9 +66,11 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.01";
+	public static final String VERSION = "2.02";
 
 	// NEWS
+	// - Added the possibility to add airports [addAirport=ICAO#name#city#coordinate#altitude##radius].
+	// - Possible to add runways to airports [ICAO#runway#coordinate#altitude#width#length#heading1#heading2#start coordinate#end coordinate#surface].
 	// - 
 
 	// TO DO
@@ -480,6 +484,30 @@ public class BushMissionGen {
 							return msgLM;
 						}
 						metaEntry.landmarks.add(lm);
+					}
+					if (metaField.startsWith("addAirport")) {
+						Airport ap = new Airport(metaName, metaField.trim(), metaString.trim());
+						Message msgAP = ap.handle();
+						if (msgAP != null) {
+							return msgAP;
+						}
+						metaEntry.airports.add(ap);
+						metaEntry.runways.put(ap.icao, new ArrayList<Runway>());
+					}
+					if (metaField.startsWith("addRunway")) {
+						Runway rw = new Runway(metaName, metaField.trim(), metaString.trim());
+						Message msgRW = rw.handle();
+						if (msgRW != null) {
+							return msgRW;
+						}
+
+						if (!metaEntry.runways.containsKey(rw.icao)) {
+							return new ErrorMessage("Could not add a runway to non-existing airport: " + rw.icao);
+						}
+
+						List<Runway> runways = metaEntry.runways.get(rw.icao);
+						runways.add(rw);
+						metaEntry.runways.put(rw.icao, runways);
 					}
 					if (metaField.equalsIgnoreCase("activateTriggers") || metaField.equalsIgnoreCase("deactivateTriggers")) {
 						String[] splitTR = metaString.split("#");
@@ -4504,16 +4532,41 @@ public class BushMissionGen {
 		Charset cs = StandardCharsets.UTF_8;
 		String PACKAGE_FILE = mFileHandling.readFileToString(inFile, cs);
 
-		StringBuffer landmarksSB = new StringBuffer();
-		int count = 0;
+		StringBuffer sceneSB = new StringBuffer();
+
+		// Add POIs
+		int lmCount = 0;
 		for (Landmark lm : metaEntry.landmarks) {
 			String refId = "206E4DAF-41DB-4198-B0A8-42094815D";
-			refId += String.format("%03d", (count++) + 1);
+			refId += String.format("%03d", (lmCount++) + 1);
 			String rowTemplate = "    <LandmarkLocation offset=\"" + lm.offset + "\" alt=\"" + lm.altitude + "\" lon=\"" + lm.lon + "\" lat=\"" + lm.lat + "\" owner=\"" + metaEntry.author + "\" name=\"" + lm.value + "\" type=\"" + lm.type + "\" instanceId=\"{" + refId + "}\"/>";
-			landmarksSB.append(System.lineSeparator()).append(rowTemplate);
+			sceneSB.append(System.lineSeparator()).append(rowTemplate);
 		}
 
-		PACKAGE_FILE = PACKAGE_FILE.replace("##LANDMARKS##", landmarksSB.toString());
+		// Add airports
+		for (Airport ap : metaEntry.airports) {
+			String rowTemplate1 = "    <Airport ident=\"" + ap.icao + "\" name=\"" + ap.name + "\" city=\"" + ap.city + "\" alt=\"" + ap.altitude + "F\" lon=\"" + ap.lon + "\" lat=\"" + ap.lat + "\" airportTestRadius=\"" + ap.radius + "M\" magvar=\"0.000000\" trafficScalar=\"0.010000\">";
+			String rowTemplate2 = "        <DeleteAirport deleteAllRunways=\"TRUE\" />";
+			String rowTemplate3 = "    </Airport>";
+
+			sceneSB.append(System.lineSeparator()).append(rowTemplate1);
+
+			List<Runway> runways = metaEntry.runways.get(ap.icao);
+			for (Runway rw : runways) {
+				sceneSB.append(System.lineSeparator()).append("        <Runway number=\"" + rw.number + "\"  lat=\"" + rw.lat + "\" lon=\"" + rw.lon + "\" alt=\"" + rw.altitude + "F\" width=\"" + rw.width + "F\" length=\"" + rw.length + "F\" heading=\"" + rw.heading1 + "\" primaryTakeoff=\"TRUE\" secondaryTakeoff=\"TRUE\" primaryLanding=\"TRUE\" secondaryLanding=\"TRUE\" surface=\"" + rw.surface + "\" transparent=\"FALSE\" groundMerging=\"FALSE\"><Markings ident=\"TRUE\" touchdown=\"FALSE\" alternateTouchdown=\"FALSE\" precision=\"FALSE\" alternatePrecision=\"FALSE\" threshold=\"TRUE\" alternateThreshold=\"FALSE\" fixedDistance=\"TRUE\" alternateFixedDistance=\"FALSE\" singleEnd=\"FALSE\" dashes=\"TRUE\" edges=\"TRUE\" edgePavement=\"FALSE\" noThresholdEndArrows=\"FALSE\" leadingZeroIdent=\"TRUE\" primaryStol=\"FALSE\" secondaryStol=\"FALSE\" primaryClosed=\"FALSE\" secondaryClosed=\"FALSE\" />");
+				sceneSB.append(System.lineSeparator()).append("            <Lights edge=\"HIGH\" center=\"NONE\" centerRed=\"FALSE\" />");
+				sceneSB.append(System.lineSeparator()).append("            <OffsetThreshold length=\"26.07F\" end=\"PRIMARY\" />");
+				sceneSB.append(System.lineSeparator()).append("            <OffsetThreshold length=\"26.07F\" end=\"SECONDARY\" />");
+				sceneSB.append(System.lineSeparator()).append("            <RunwayStart end=\"PRIMARY\" lat=\"" + rw.lat1 + "\" lon=\"" + rw.lon1 + "\" alt=\"0.00F\" heading=\"" + rw.heading1 + "\" />");
+				sceneSB.append(System.lineSeparator()).append("            <RunwayStart end=\"SECONDARY\" lat=\"" + rw.lat2 + "\" lon=\"" + rw.lon2 + "\" alt=\"0.00F\" heading=\"" + rw.heading2 +"\" />");
+				sceneSB.append(System.lineSeparator()).append("        </Runway>");
+			}
+
+			sceneSB.append(System.lineSeparator()).append(rowTemplate2);
+			sceneSB.append(System.lineSeparator()).append(rowTemplate3);
+		}
+
+		PACKAGE_FILE = PACKAGE_FILE.replace("##LANDMARKS##", sceneSB.toString());
 
 		Message msg = mFileHandling.writeStringToFile(outFile, PACKAGE_FILE, cs);
 		if (msg != null) {
