@@ -71,6 +71,8 @@ public class BushMissionGen {
 	// NEWS
 	// - Added the possibility to add airports [addAirport=ICAO#name#city#coordinate#altitude##radius].
 	// - Possible to add runways to airports [ICAO#runway#coordinate#altitude#width#length#heading1#heading2#start coordinate#end coordinate#surface].
+	// - Pitch, bank and snap to ground added as parameters to the libraryObject field.
+	// - Generated runways are shown in the GeoJSON preview file.
 	// - 
 
 	// TO DO
