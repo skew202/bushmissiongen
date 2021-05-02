@@ -2932,11 +2932,14 @@ public class BushMissionGen {
 				lo.triggerId = triggerName;
 				lo.triggerGUID = refId1;
 				ss = ss.replace("##DESCR_LIBOBJ##",  triggerName);
+				ss = ss.replace("##PITCH_LIBOBJ##", lo.pitch);
+				ss = ss.replace("##BANK_LIBOBJ##", lo.bank);
 				ss = ss.replace("##HEADING_LIBOBJ##", lo.heading);
 				ss = ss.replace("##MDLGUID_LIBOBJ##", lo.mdlGUID);
 				ss = ss.replace("##LLA_LIBOBJ##", lo.latlon + ",+" + lo.altitude);
 				ss = ss.replace("##SCALE_LIBOBJ##", lo.scale);
 				ss = ss.replace("##USE_AGL##", lo.agl.isEmpty() ? (metaEntry.useAGL.isEmpty() ? "False" : "True") : lo.agl);
+				ss = ss.replace("##SNAP_TO_GROUND_LIBOBJ##", lo.snapToGround);
 
 				String deactivatedXML = System.lineSeparator() + "		<Activated>False</Activated>";
 				String activated = lo.activated.isEmpty() ? (metaEntry.deactivateLibObjsAtStart.isEmpty() ? "" : deactivatedXML) : (lo.activated.equals("True") ? "" : deactivatedXML);
