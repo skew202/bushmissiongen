@@ -125,6 +125,7 @@ public class MetaEntry extends GenericEntry {
 	public String requireEnginesOff = "";
 	public String requireBatteryOff = "";
 	public String requireAvionicsOff = "";
+	public String noWpTranslations = "";
 	public String useAGL = "";
 	public String useOneShotTriggers = "True";
 	public String standardAirportExitAreaSideLength = "";

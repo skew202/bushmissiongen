@@ -66,14 +66,11 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.02";
+	public static final String VERSION = "2.03";
 
 	// NEWS
-	// - Added the possibility to add airports [addAirport=ICAO#name#city#coordinate#altitude##radius].
-	// - Possible to add runways to airports [ICAO#coordinate#altitude#width#length#heading#start coordinate#end coordinate#surface].
-	// - Pitch, bank and snap to ground added as parameters to the libraryObject field.
-	// - Generated runways are shown in the GeoJSON preview file.
-	// - 
+	// - Added a field to disable waypoint translations. Used to overcome a bug in the sim when enabling ROUTE AND WAYPOINTS" in the Assistance menu [noWpTranslations=[True/False]].
+	// - A check has been added to see if airports exist which do not have any runways.
 
 	// TO DO
 	// - What is the Overview.htm file used for in landing challenges?
@@ -631,6 +628,10 @@ public class BushMissionGen {
 					if (metaField.equalsIgnoreCase("requireAvionicsOff")) {
 						String val = metaString.trim().toLowerCase();
 						metaEntry.requireAvionicsOff = val.equals("true") ? "True" : "";
+					}
+					if (metaField.equalsIgnoreCase("noWpTranslations")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.noWpTranslations = val.equals("true") ? "True" : "";
 					}
 					if (metaField.equalsIgnoreCase("useAGL")) {
 						String val = metaString.trim().toLowerCase();
@@ -1443,6 +1444,13 @@ public class BushMissionGen {
 					return new ErrorMessage("Invalid runway number: " + entries.get(entries.size()-1).runway);
 				}
 			} catch (NumberFormatException nfe) {
+			}
+		}
+
+		// If an airport is added, make sure that it has at least one runway.
+		for (Airport ap : metaEntry.airports) {
+			if (metaEntry.runways.get(ap.icao).isEmpty()) {
+				return new ErrorMessage("This airport has no runways defined: " + ap.icao + "\n\nPlease add with the field addRunway");
 			}
 		}
 
@@ -3761,7 +3769,7 @@ public class BushMissionGen {
 			ss.append((metaEntry.missionType.equals("bush") ? entry.region : "") + ", ");
 			ss.append((metaEntry.missionType.equals("bush") ? entry.id : (entry.type.equals(WpType.AIRPORT) ? entry.id : "")) + ", ");
 			ss.append(", ");
-			ss.append((entry.nameID) + ", ");
+			ss.append((metaEntry.noWpTranslations.isEmpty() ? entry.nameID : entry.name) + ", ");
 			ss.append((entry.type.equals(WpType.USER) ? "U" : "A") + ", ");
 			ss.append(entry.latlon + ", ");
 			ss.append(entry.alt + ", ");
