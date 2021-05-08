@@ -1,0 +1,6 @@
+    <SimMission.ChangeAssistanceItemAction InstanceId="{##REF_ID_ASSIST##}">
+      <Descr>##DESCR_ASSIST##</Descr>
+      <SetChangeable>##CHANGEABLE_ASSIST##</SetChangeable>
+      <SetValue>##VALUE_ASSIST##</SetValue>
+      <AssistanceItemID>##ITEMID_ASSIST##</AssistanceItemID>
+    </SimMission.ChangeAssistanceItemAction>

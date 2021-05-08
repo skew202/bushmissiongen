@@ -66,11 +66,9 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.04";
+	public static final String VERSION = "2.05";
 
 	// NEWS
-	// - Fix for special characters in landmark names.
-	// - Added more runway surfaces (Thanks BuffyGC!).
 	// - 
 
 	// TO DO
@@ -122,6 +120,7 @@ public class BushMissionGen {
 	private static String XML_ALTITUDESPEEDTRIGGER;
 	private static String XML_ALTITUDETRIGGER;
 	private static String XML_CALC;
+	private static String XML_CHANGEASSISTANCEITEMACTION;
 	private static String XML_COUNTACTION;
 	private static String XML_COUNTERTRIGGER;
 	private static String XML_DIALOGACTION;
@@ -633,6 +632,34 @@ public class BushMissionGen {
 					if (metaField.equalsIgnoreCase("noWpTranslations")) {
 						String val = metaString.trim().toLowerCase();
 						metaEntry.noWpTranslations = val.equals("true") ? "True" : "";
+					}
+					if (metaField.equalsIgnoreCase("noCollisions")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.noCollisions = val.equals("true") ? "True" : "";
+					}
+					if (metaField.equalsIgnoreCase("showPois")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.showPois = val.equals("true") ? "True" : "";
+					}
+					if (metaField.equalsIgnoreCase("showCities")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.showCities = val.equals("true") ? "True" : "";
+					}
+					if (metaField.equalsIgnoreCase("showFauna")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.showFauna = val.equals("true") ? "True" : "";
+					}
+					if (metaField.equalsIgnoreCase("showAirports")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.showAirports = val.equals("true") ? "True" : "";
+					}
+					if (metaField.equalsIgnoreCase("showWaypoints")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.showWaypoints = val.equals("true") ? "True" : "";
+					}
+					if (metaField.equalsIgnoreCase("enableFullAssistance")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.enableFullAssistance = val.equals("true") ? "True" : "";
 					}
 					if (metaField.equalsIgnoreCase("useAGL")) {
 						String val = metaString.trim().toLowerCase();
@@ -1685,6 +1712,7 @@ public class BushMissionGen {
 		XML_ALTITUDESPEEDTRIGGER = mFileHandling.readUrlToString("XML/ALTITUDESPEEDTRIGGER.txt", Charset.forName("windows-1252"));
 		XML_ALTITUDETRIGGER = mFileHandling.readUrlToString("XML/ALTITUDETRIGGER.txt", Charset.forName("windows-1252"));
 		XML_CALC = mFileHandling.readUrlToString("XML/CALC.txt", Charset.forName("windows-1252"));
+		XML_CHANGEASSISTANCEITEMACTION = mFileHandling.readUrlToString("XML/CHANGEASSISTANCEITEMACTION.txt", Charset.forName("windows-1252"));
 		XML_COUNTACTION = mFileHandling.readUrlToString("XML/COUNTACTION.txt", Charset.forName("windows-1252"));
 		XML_COUNTERTRIGGER = mFileHandling.readUrlToString("XML/COUNTERTRIGGER.txt", Charset.forName("windows-1252"));
 		XML_DIALOGACTION = mFileHandling.readUrlToString("XML/DIALOGACTION.txt", Charset.forName("windows-1252"));
@@ -2200,6 +2228,103 @@ public class BushMissionGen {
 			}
 			count_ENTRY++;
 			lastEntry = entry;			
+		}
+
+		StringBuffer sb_INTROACTIONS = new StringBuffer();
+		if (!metaEntry.noCollisions.isEmpty()) {
+			sb_INTROACTIONS.append(System.lineSeparator());
+
+			String ss = XML_CHANGEASSISTANCEITEMACTION;
+
+			String refId = "C1FA4253-65BD-4370-986C-40CA123E4C70";
+			ss = ss.replace("##REF_ID_ASSIST##", refId);
+			ss = ss.replace("##DESCR_ASSIST##",  "NoCollisions");
+			ss = ss.replace("##CHANGEABLE_ASSIST##",  "LOCK");
+			ss = ss.replace("##VALUE_ASSIST##", "ON");
+			ss = ss.replace("##ITEMID_ASSIST##", "ASSISTANCE_ITEM_NO_COLLISIONS");
+
+			sb_INTROACTIONS.append(ss);
+			sb_INTROACTIONS.append(System.lineSeparator());
+		}
+
+		if (!metaEntry.showPois.isEmpty()) {
+			sb_INTROACTIONS.append(System.lineSeparator());
+
+			String ss = XML_CHANGEASSISTANCEITEMACTION;
+
+			String refId = "C1FA4253-65BD-4370-986C-40CA123E4C71";
+			ss = ss.replace("##REF_ID_ASSIST##", refId);
+			ss = ss.replace("##DESCR_ASSIST##",  "ShowPois");
+			ss = ss.replace("##CHANGEABLE_ASSIST##",  "UNLOCK");
+			ss = ss.replace("##VALUE_ASSIST##", "ON");
+			ss = ss.replace("##ITEMID_ASSIST##", "ASSISTANCE_ITEM_SMARTCAM_ENABLE_POI");
+
+			sb_INTROACTIONS.append(ss);
+			sb_INTROACTIONS.append(System.lineSeparator());
+		}
+
+		if (!metaEntry.showCities.isEmpty()) {
+			sb_INTROACTIONS.append(System.lineSeparator());
+
+			String ss = XML_CHANGEASSISTANCEITEMACTION;
+
+			String refId = "C1FA4253-65BD-4370-986C-40CA123E4C72";
+			ss = ss.replace("##REF_ID_ASSIST##", refId);
+			ss = ss.replace("##DESCR_ASSIST##",  "ShowCities");
+			ss = ss.replace("##CHANGEABLE_ASSIST##",  "UNLOCK");
+			ss = ss.replace("##VALUE_ASSIST##", "ON");
+			ss = ss.replace("##ITEMID_ASSIST##", "ASSISTANCE_ITEM_SMARTCAM_ENABLE_CITIES");
+
+			sb_INTROACTIONS.append(ss);
+			sb_INTROACTIONS.append(System.lineSeparator());
+		}
+
+		if (!metaEntry.showFauna.isEmpty()) {
+			sb_INTROACTIONS.append(System.lineSeparator());
+
+			String ss = XML_CHANGEASSISTANCEITEMACTION;
+
+			String refId = "C1FA4253-65BD-4370-986C-40CA123E4C73";
+			ss = ss.replace("##REF_ID_ASSIST##", refId);
+			ss = ss.replace("##DESCR_ASSIST##",  "ShowFauna");
+			ss = ss.replace("##CHANGEABLE_ASSIST##",  "UNLOCK");
+			ss = ss.replace("##VALUE_ASSIST##", "ON");
+			ss = ss.replace("##ITEMID_ASSIST##", "ASSISTANCE_ITEM_SMARTCAM_ENABLE_FAUNA");
+
+			sb_INTROACTIONS.append(ss);
+			sb_INTROACTIONS.append(System.lineSeparator());
+		}
+
+		if (!metaEntry.showAirports.isEmpty()) {
+			sb_INTROACTIONS.append(System.lineSeparator());
+
+			String ss = XML_CHANGEASSISTANCEITEMACTION;
+
+			String refId = "C1FA4253-65BD-4370-986C-40CA123E4C74";
+			ss = ss.replace("##REF_ID_ASSIST##", refId);
+			ss = ss.replace("##DESCR_ASSIST##",  "ShowAirports");
+			ss = ss.replace("##CHANGEABLE_ASSIST##",  "UNLOCK");
+			ss = ss.replace("##VALUE_ASSIST##", "ON");
+			ss = ss.replace("##ITEMID_ASSIST##", "ASSISTANCE_ITEM_SMARTCAM_ENABLE_AIRPORT");
+
+			sb_INTROACTIONS.append(ss);
+			sb_INTROACTIONS.append(System.lineSeparator());
+		}
+
+		if (!metaEntry.showWaypoints.isEmpty()) {
+			sb_INTROACTIONS.append(System.lineSeparator());
+
+			String ss = XML_CHANGEASSISTANCEITEMACTION;
+
+			String refId = "C1FA4253-65BD-4370-986C-40CA123E4C75";
+			ss = ss.replace("##REF_ID_ASSIST##", refId);
+			ss = ss.replace("##DESCR_ASSIST##",  "ShowWaypoints");
+			ss = ss.replace("##CHANGEABLE_ASSIST##",  "UNLOCK");
+			ss = ss.replace("##VALUE_ASSIST##", "ON");
+			ss = ss.replace("##ITEMID_ASSIST##", "ASSISTANCE_ITEM_WORLD_WAYPOINTS");
+
+			sb_INTROACTIONS.append(ss);
+			sb_INTROACTIONS.append(System.lineSeparator());
 		}
 
 		StringBuffer sb_DIALOGS = new StringBuffer();
@@ -3643,6 +3768,7 @@ public class BushMissionGen {
 
 		StringBuffer sb_DISABLE_STUFF = new StringBuffer();
 		StringBuffer sb_SHOW_STUFF = new StringBuffer();
+		StringBuffer sb_INTRO_STUFF = new StringBuffer();
 		StringBuffer sb_CALCULATOR_STUFF = new StringBuffer();
 		StringBuffer sb_FLOWEVENT_STUFF = new StringBuffer();
 		if (!metaEntry.showNavLog.isEmpty()) {
@@ -3694,6 +3820,25 @@ public class BushMissionGen {
 			sb_DISABLE_STUFF.append(System.lineSeparator()).append("        <FlowEvent id=\"PANEL_OBJECTIVES_FORCE_DISABLED\" />");
 		}
 
+		if (!metaEntry.noCollisions.isEmpty()) {
+			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"NoCollisions\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C70}\" />");
+		}
+		if (!metaEntry.showPois.isEmpty()) {
+			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"ShowPois\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C71}\" />");
+		}
+		if (!metaEntry.showCities.isEmpty()) {
+			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"ShowCities\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C72}\" />");
+		}
+		if (!metaEntry.showFauna.isEmpty()) {
+			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"ShowFauna\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C73}\" />");
+		}
+		if (!metaEntry.showAirports.isEmpty()) {
+			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"ShowAirports\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C74}\" />");
+		}
+		if (!metaEntry.showWaypoints.isEmpty()) {
+			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"ShowWaypoints\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C75}\" />");
+		}
+
 		XML_FILE = XML_FILE.replace("##META_PROJECT##", metaEntry.project);
 		XML_FILE = XML_FILE.replace("##META_TITLE##", metaEntry.titleID);
 		XML_FILE = XML_FILE.replace("##LEGS##", sb.toString());
@@ -3708,9 +3853,11 @@ public class BushMissionGen {
 		XML_FILE = XML_FILE.replace("##WARNINGS##", text_WARNINGS);
 		XML_FILE = XML_FILE.replace("##LIBOBJS##", text_LIBOBJECTS);
 		XML_FILE = XML_FILE.replace("##LANDINGACTIONS##", sb_LANDINGACTIONS);
+		XML_FILE = XML_FILE.replace("##INTROACTIONS##", sb_INTROACTIONS);
 		XML_FILE = XML_FILE.replace("##COUNTERS##", text_COUNTERS);
 		XML_FILE = XML_FILE.replace("##DISABLE_STUFF##", sb_DISABLE_STUFF);
 		XML_FILE = XML_FILE.replace("##SHOW_STUFF##", sb_SHOW_STUFF);
+		XML_FILE = XML_FILE.replace("##INTRO_STUFF##", sb_INTRO_STUFF);
 		XML_FILE = XML_FILE.replace("##CALCULATOR_STUFF##", sb_CALCULATOR_STUFF);
 		XML_FILE = XML_FILE.replace("##FLOWEVENT_STUFF##", sb_FLOWEVENT_STUFF);
 
@@ -3822,7 +3969,7 @@ public class BushMissionGen {
 		FLT_FILE = FLT_FILE.replace("##COPILOTS##", sbCP.toString());
 
 		// Assistance
-		if (!metaEntry.enableAtc.isEmpty() || !metaEntry.landmarks.isEmpty()) {
+		if (!metaEntry.enableAtc.isEmpty() || !metaEntry.enableFullAssistance.isEmpty()) {
 			FLT_FILE = FLT_FILE.replace("##META_ASSISTANCE##", "");
 		} else {
 			FLT_FILE = FLT_FILE.replace("##META_ASSISTANCE##", System.lineSeparator() + "Preset=ASSISTANCE_PRESET_BUSH_TRIP");
