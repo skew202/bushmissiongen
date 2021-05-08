@@ -66,11 +66,12 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.03";
+	public static final String VERSION = "2.04";
 
 	// NEWS
-	// - Added a field to disable waypoint translations. Used to overcome a bug in the sim when enabling ROUTE AND WAYPOINTS" in the Assistance menu [noWpTranslations=[True/False]].
-	// - A check has been added to see if airports exist which do not have any runways.
+	// - Fix for special characters in landmark names.
+	// - Added more runway surfaces (Thanks BuffyGC!).
+	// - 
 
 	// TO DO
 	// - What is the Overview.htm file used for in landing challenges?

@@ -174,18 +174,25 @@ public class Runway {
 				"CONCRETE",
 				"CORAL",
 				"DIRT",
+				"FOREST",
 				"GRASS",
+				"GRASS_BUMPY",
 				"GRAVEL",
+				"HARD_TURF",
 				"ICE",
+				"LONG_GRASS",
 				"MACADAM",
 				"OIL_TREATED, PLANKS",
 				"SAND",
 				"SHALE",
+				"SHORT_GRASS",
 				"SNOW",
 				"STEEL_MATS",
 				"TARMAC",
 				"UNKNOWN",
-				"WATER"
+				"URBAN",
+				"WATER",
+				"WRIGHT_FLYER_TRACK"
 		};
 		Pattern patternSURFACE = Pattern.compile("^(" + String.join("|", RUNWAY_SURFACES) + ")$");
 		Matcher matcherSURFACE = patternSURFACE.matcher(surface);

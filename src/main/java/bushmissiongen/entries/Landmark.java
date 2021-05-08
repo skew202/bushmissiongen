@@ -38,6 +38,14 @@ public class Landmark {
 			offset = split[3];
 			type = split[4];
 
+			// Replace bad chars in values
+			value = value.replace("–", "-");
+			value = value.replace("&", "&amp;");
+			value = value.replace("'", "&#39;");
+			value = value.replace("\"", "&quot;");
+			value = value.replace("\r\n", "<br>");
+			value = value.replace("\n", "<br>");
+
 			// Coordinate transformation
 			MissionEntry meTest = new MissionEntry();
 			Message msgLatlon = meTest.setLatlon(latlon);

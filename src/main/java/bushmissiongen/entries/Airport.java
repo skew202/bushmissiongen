@@ -40,6 +40,22 @@ public class Airport {
 			altitude = split[4];
 			radius = split[5];
 
+			// Replace bad chars in airport names
+			name = name.replace("–", "-");
+			name = name.replace("&", "&amp;");
+			name = name.replace("'", "&#39;");
+			name = name.replace("\"", "&quot;");
+			name = name.replace("\r\n", "<br>");
+			name = name.replace("\n", "<br>");
+
+			// Replace bad chars in city names
+			city = city.replace("–", "-");
+			city = city.replace("&", "&amp;");
+			city = city.replace("'", "&#39;");
+			city = city.replace("\"", "&quot;");
+			city = city.replace("\r\n", "<br>");
+			city = city.replace("\n", "<br>");
+
 			// Coordinate transformation
 			MissionEntry meTest = new MissionEntry();
 			Message msgLatlon = meTest.setLatlon(latlon);
