@@ -657,6 +657,10 @@ public class BushMissionGen {
 						String val = metaString.trim().toLowerCase();
 						metaEntry.showWaypoints = val.equals("true") ? "True" : "";
 					}
+					if (metaField.equalsIgnoreCase("noCrashes")) {
+						String val = metaString.trim().toLowerCase();
+						metaEntry.noCrashes = val.equals("true") ? "True" : "";
+					}
 					if (metaField.equalsIgnoreCase("enableFullAssistance")) {
 						String val = metaString.trim().toLowerCase();
 						metaEntry.enableFullAssistance = val.equals("true") ? "True" : "";
@@ -2327,6 +2331,22 @@ public class BushMissionGen {
 			sb_INTROACTIONS.append(System.lineSeparator());
 		}
 
+		if (!metaEntry.noCrashes.isEmpty()) {
+			sb_INTROACTIONS.append(System.lineSeparator());
+
+			String ss = XML_CHANGEASSISTANCEITEMACTION;
+
+			String refId = "C1FA4253-65BD-4370-986C-40CA123E4C76";
+			ss = ss.replace("##REF_ID_ASSIST##", refId);
+			ss = ss.replace("##DESCR_ASSIST##",  "NoCrashes");
+			ss = ss.replace("##CHANGEABLE_ASSIST##",  "UNLOCK");
+			ss = ss.replace("##VALUE_ASSIST##", "ON");
+			ss = ss.replace("##ITEMID_ASSIST##", "ASSISTANCE_ITEM_NO_CRASH_MODE");
+
+			sb_INTROACTIONS.append(ss);
+			sb_INTROACTIONS.append(System.lineSeparator());
+		}
+
 		StringBuffer sb_DIALOGS = new StringBuffer();
 		if (!metaEntry.poiSpeech.isEmpty() || !metaEntry.poiSpeechBefore.isEmpty()) {
 			sb_DIALOGS.append(System.lineSeparator());
@@ -3837,6 +3857,9 @@ public class BushMissionGen {
 		}
 		if (!metaEntry.showWaypoints.isEmpty()) {
 			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"ShowWaypoints\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C75}\" />");
+		}
+		if (!metaEntry.noCrashes.isEmpty()) {
+			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"NoCrashes\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C76}\" />");
 		}
 
 		XML_FILE = XML_FILE.replace("##META_PROJECT##", metaEntry.project);

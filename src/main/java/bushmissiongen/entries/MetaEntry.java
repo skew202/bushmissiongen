@@ -127,6 +127,7 @@ public class MetaEntry extends GenericEntry {
 	public String requireAvionicsOff = "";
 	public String noWpTranslations = "";
 	public String noCollisions = "";
+	public String noCrashes = "";
 	public String showPois = "";
 	public String showCities = "";
 	public String showFauna = "";
