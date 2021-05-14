@@ -1,0 +1,7 @@
+    <SimMission.RequestTeleportAction InstanceId="{##REF_ID_ACTION##}">
+      <Descr>##DESCR_ACTION##</Descr>
+      <AttachedWorldPosition>
+        <WorldPosition>##LLA_AREA_ACTION##</WorldPosition>
+        <AltitudeIsAGL>##USE_AGL_ACTION##</AltitudeIsAGL>
+      </AttachedWorldPosition>
+    </SimMission.RequestTeleportAction>

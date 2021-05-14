@@ -41,6 +41,7 @@ import bushmissiongen.entries.MissionEntry.WpType;
 import bushmissiongen.entries.MissionFailureEntry;
 import bushmissiongen.entries.MissionFailureEntry.MissionFailureEntryMode;
 import bushmissiongen.entries.Runway;
+import bushmissiongen.entries.Teleport;
 import bushmissiongen.entries.WarningEntry;
 import bushmissiongen.entries.WarningEntry.WarningEntryMode;
 import bushmissiongen.handling.FileHandling;
@@ -66,7 +67,7 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.05";
+	public static final String VERSION = "2.06";
 
 	// NEWS
 	// - 
@@ -139,6 +140,7 @@ public class BushMissionGen {
 	private static String XML_OBJECTIVE;
 	private static String XML_OBJECTACTIVATIONACTION;
 	private static String XML_PROXIMITYTRIGGER;
+	private static String XML_REQUESTTELEPORTACTION;
 	private static String XML_RESETACTION;
 	private static String XML_SPEEDTRIGGER;
 	private static String XML_SUBLEG;
@@ -468,7 +470,7 @@ public class BushMissionGen {
 						}
 						metaEntry.dialogEntries.add(de);						
 					}
-					if (metaField.startsWith("libraryObject")) {
+					if (metaField.equalsIgnoreCase("libraryObject")) {
 						LibraryObject lo = new LibraryObject(metaName, metaField.trim(), metaString.trim());
 						Message msgLO = lo.handle();
 						if (msgLO != null) {
@@ -476,7 +478,7 @@ public class BushMissionGen {
 						}
 						metaEntry.libraryObjects.add(lo);
 					}
-					if (metaField.startsWith("landmarkObject")) {
+					if (metaField.equalsIgnoreCase("landmarkObject")) {
 						Landmark lm = new Landmark(metaName, metaField.trim(), metaString.trim());
 						Message msgLM = lm.handle();
 						if (msgLM != null) {
@@ -484,7 +486,7 @@ public class BushMissionGen {
 						}
 						metaEntry.landmarks.add(lm);
 					}
-					if (metaField.startsWith("addAirport")) {
+					if (metaField.equalsIgnoreCase("addAirport")) {
 						Airport ap = new Airport(metaName, metaField.trim(), metaString.trim());
 						Message msgAP = ap.handle();
 						if (msgAP != null) {
@@ -493,7 +495,7 @@ public class BushMissionGen {
 						metaEntry.airports.add(ap);
 						metaEntry.runways.put(ap.icao, new ArrayList<Runway>());
 					}
-					if (metaField.startsWith("addRunway")) {
+					if (metaField.equalsIgnoreCase("addRunway")) {
 						Runway rw = new Runway(metaName, metaField.trim(), metaString.trim());
 						Message msgRW = rw.handle();
 						if (msgRW != null) {
@@ -507,6 +509,14 @@ public class BushMissionGen {
 						List<Runway> runways = metaEntry.runways.get(rw.icao);
 						runways.add(rw);
 						metaEntry.runways.put(rw.icao, runways);
+					}
+					if (metaField.startsWith("teleport")) {
+						Teleport tp = new Teleport(metaName, metaField.trim(), metaString.trim());
+						Message msgTP = tp.handle();
+						if (msgTP != null) {
+							return msgTP;
+						}
+						metaEntry.teleports.add(tp);
 					}
 					if (metaField.equalsIgnoreCase("activateTriggers") || metaField.equalsIgnoreCase("deactivateTriggers")) {
 						String[] splitTR = metaString.split("#");
@@ -1735,6 +1745,7 @@ public class BushMissionGen {
 		XML_OBJECTIVE = mFileHandling.readUrlToString("XML/OBJECTIVE.txt", Charset.forName("windows-1252"));
 		XML_OBJECTACTIVATIONACTION = mFileHandling.readUrlToString("XML/OBJECTACTIVATIONACTION.txt", Charset.forName("windows-1252"));
 		XML_PROXIMITYTRIGGER = mFileHandling.readUrlToString("XML/PROXIMITYTRIGGER.txt", Charset.forName("windows-1252"));
+		XML_REQUESTTELEPORTACTION = mFileHandling.readUrlToString("XML/REQUESTTELEPORTACTION.txt", Charset.forName("windows-1252"));
 		XML_RESETACTION = mFileHandling.readUrlToString("XML/RESETACTION.txt", Charset.forName("windows-1252"));
 		XML_SPEEDTRIGGER = mFileHandling.readUrlToString("XML/SPEEDTRIGGER.txt", Charset.forName("windows-1252"));
 		XML_SUBLEG = mFileHandling.readUrlToString("XML/SUBLEG.txt", Charset.forName("windows-1252"));
@@ -3506,6 +3517,62 @@ public class BushMissionGen {
 			}
 		}
 
+		// Teleports
+		StringBuffer sb_TELEPORTS = new StringBuffer();
+		if (!metaEntry.teleports.isEmpty()) {
+
+			int count_TELEPORTS = 0;
+			for (Teleport tp : metaEntry.teleports) {
+				count_TELEPORTS++;
+
+				String ss = XML_PROXIMITYTRIGGER;
+				ss = ss.replace("##ACTION##", XML_REQUESTTELEPORTACTION);
+
+				if (tp.exit) {
+					ss = ss.replace("##ENTERACTION##", "");
+					ss = ss.replace("##EXITACTION##", System.lineSeparator() + "        <ObjectReference id=\"##DESCR_ACTION##\" InstanceId=\"{##REF_ID_ACTION##}\"/>");
+				} else {
+					ss = ss.replace("##ENTERACTION##", System.lineSeparator() + "        <ObjectReference id=\"##DESCR_ACTION##\" InstanceId=\"{##REF_ID_ACTION##}\"/>");
+					ss = ss.replace("##EXITACTION##", "");
+				}
+
+				String refId1 = "DE321F91-1A23-4E19-B9B5-B4434EA75";
+				refId1 += String.format("%03d", count_TELEPORTS);
+				String refId2 = "0AE3B2BB-876B-4EA9-B8C9-9FA43B370";
+				refId2 += String.format("%03d", count_TELEPORTS);
+				String refId3 = "BFE92003-9672-4407-AC8D-75CC89AE1";
+				refId3 += String.format("%03d", count_TELEPORTS);
+
+				// ACTION
+				ss = ss.replace("##REF_ID_TRIGGER##", refId1);
+				String triggerName = "TeleportTrigger" + count_TELEPORTS;
+				tp.triggerId = triggerName;
+				tp.triggerGUID = refId1;
+				ss = ss.replace("##DESCR_TRIGGER##", triggerName);
+				ss = ss.replace("##DEFAULTACTIVATED_TRIGGER##", "True");
+				ss = ss.replace("##ACTIVATED_TRIGGER##", "True");
+				ss = ss.replace("##ONESHOT_TRIGGER##", metaEntry.useOneShotTriggers.isEmpty() ? "False" : "True");
+				ss = ss.replace("##DESCR_ACTION##", "TeleportAction" + count_TELEPORTS);
+				ss = ss.replace("##REF_ID_ACTION##", refId2);
+
+				ss = ss.replace("##REF_ID_AREA##", refId3);
+				ss = ss.replace("##DESCR_AREA##",  "RectangleAreaTP" + count_TELEPORTS);
+				ss = ss.replace("##LENGTH_AREA##", tp.length);
+				ss = ss.replace("##WIDTH_AREA##", tp.width);
+				ss = ss.replace("##HEIGHT_AREA##", tp.height);
+				ss = ss.replace("##HEADING_AREA##", tp.heading);
+				ss = ss.replace("##LLA_AREA##", tp.latlon + ",-000200.00");
+				ss = ss.replace("##USE_AGL##", tp.agl.isEmpty() ? (metaEntry.useAGL.isEmpty() ? "False" : "True") : tp.agl);
+
+				ss = ss.replace("##LLA_AREA_ACTION##", tp.latlontele + "," + tp.altitude);
+				ss = ss.replace("##USE_AGL_ACTION##", tp.agltele.isEmpty() ? (metaEntry.useAGL.isEmpty() ? "False" : "True") : tp.agltele);
+
+				sb_TELEPORTS.append(System.lineSeparator());
+				sb_TELEPORTS.append(ss);
+
+			}
+		}
+
 		// Count triggers
 		StringBuffer sb_COUNTERS = new StringBuffer();
 		if (!metaEntry.counterToggleTriggers.isEmpty()) {
@@ -3591,6 +3658,8 @@ public class BushMissionGen {
 				count++;
 			}
 		}
+
+		sb_ACTIONS.append(sb_TELEPORTS);
 
 		// To be able to manipulate the dialog data
 		String text_COUNTERS = sb_COUNTERS.toString();

@@ -155,6 +155,7 @@ public class MetaEntry extends GenericEntry {
 	public List<Landmark> landmarks = new ArrayList<>();
 	public List<Airport> airports = new ArrayList<>();
 	public Map<String, List<Runway>> runways = new HashMap<>();
+	public List<Teleport> teleports = new ArrayList<>();
 
 	public Map<String, ToggleTrigger> toggleTriggers = new HashMap<>();
 	public Map<String, ToggleTrigger> counterToggleTriggers = new HashMap<>();
