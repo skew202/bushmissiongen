@@ -1,0 +1,26 @@
+{
+  "market-data": {
+    "Neutral": {
+      "creator": "##META_AUTHOR##",
+      "title": "##META_TITLE##",
+      "description": "##META_DESCR##",
+      "support-contact": "##META_AUTHOR##",
+      "tags": "##TAG_TYPE## BMG",
+      "thumbnail_main": "thumbnail_main.jpg",
+      "thumbnail_secondary": "thumbnail_secondary.jpg",
+      "categories": "TT:MARKETPLACE.CATEGORY.ACTIVITIES\/TT:MARKETPLACE.CATEGORY.ACTIVITIES.##ACTIVITY_TYPE##",
+      "media-backgrounds": [
+        "BushMissionGen3840x2160.jpg,BushMissionGen3840x2160.jpg"
+      ],
+      "blocks": [
+        {
+          "type": "SPECS",
+          "data": {
+            "values": [##BLOCKS##
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

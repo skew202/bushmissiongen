@@ -15,8 +15,16 @@
 			<Flags>
 				<FSXCompatibility>false</FSXCompatibility>
 			</Flags>
-			<AssetDir>PackageDefinitions\ContentInfo</AssetDir>
+			<AssetDir>PackageDefinitions\##META_PROJECT##\ContentInfo</AssetDir>
 			<OutputDir>ContentInfo\##META_PROJECT##</OutputDir>
+		</AssetGroup>
+		<AssetGroup Name="MarketplaceData">
+			<Type>MarketplaceData</Type>
+			<Flags>
+				<FSXCompatibility>false</FSXCompatibility>
+			</Flags>
+			<AssetDir>PackageDefinitions\##META_PROJECT##\MarketplaceData</AssetDir>
+			<OutputDir>MarketplaceData\##META_PROJECT##</OutputDir>
 		</AssetGroup>
 		<AssetGroup Name="##META_PROJECT##">
 			<Type>Mission</Type>

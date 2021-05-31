@@ -67,7 +67,7 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.06";
+	public static final String VERSION = "2.07";
 
 	// NEWS
 	// - 
@@ -1254,6 +1254,8 @@ public class BushMissionGen {
 		String recept_fileLOC = "##PATH_DIR##" + File.separator + "templates" + File.separator + "template.loc";
 		String recept_project = "##PATH_DIR##" + File.separator + "templates" + File.separator + "project.xml";
 		String recept_package = "##PATH_DIR##" + File.separator + "templates" + File.separator + "package.xml";
+		String recept_business = "##PATH_DIR##" + File.separator + "templates" + File.separator + "Business.json";
+		String recept_marketplace = "##PATH_DIR##" + File.separator + "templates" + File.separator + "Marketplace.json";
 		String recept_scene = "##PATH_DIR##" + File.separator + "templates" + File.separator + "scene.xml";
 		String recept_overview = "##PATH_DIR##" + File.separator + "templates" + File.separator + "Overview.htm";
 		String recept_weather = "##PATH_DIR##" + File.separator + "Weather.WPR";
@@ -1266,6 +1268,8 @@ public class BushMissionGen {
 				recept_fileLOC,
 				recept_project,
 				recept_package,
+				recept_business,
+				recept_marketplace,
 				recept_scene,
 				recept_weather
 		};
@@ -1277,6 +1281,8 @@ public class BushMissionGen {
 				recept_fileLOC,
 				recept_project,
 				recept_package,
+				recept_business,
+				recept_marketplace,
 				recept_scene,
 				recept_overview,
 				recept_weather
@@ -1291,7 +1297,9 @@ public class BushMissionGen {
 		String fourFilesPath = projectPath + File.separator + "source";
 		String imagesPath = fourFilesPath + File.separator + "images";
 		String soundPath = fourFilesPath + File.separator + "sound";
-		String contentInfoPath = packageDefinitionsPath + File.separator + "ContentInfo";
+		String packageMiscPath = packageDefinitionsPath + File.separator + metaEntry.project;
+		String contentInfoPath = packageMiscPath + File.separator + "ContentInfo";
+		String marketplaceDataPath = packageMiscPath + File.separator + "MarketplaceData";
 		String scenePath = packageSourcesPath + File.separator + "scene";
 		String compiledPath = projectPath + File.separator + "Packages";
 
@@ -1309,6 +1317,8 @@ public class BushMissionGen {
 		String outFileHTM = fourFilesPath + File.separator + "Overview.htm";
 		String outFileProject = projectPath + File.separator + metaEntry.project + "project.xml";
 		String outFilePackage = packageDefinitionsPath + File.separator + metaEntry.project + ".xml";
+		String outFileBusiness = packageMiscPath + File.separator + "Business.json";
+		String outFileMarketplace = marketplaceDataPath + File.separator + "Marketplace.json";
 		String outFileScene = scenePath + File.separator + "objects.xml";
 		String outFilePreview = projectPath + File.separator + "preview.html";
 		String outFileJSON = projectPath + File.separator + "preview.geojson";
@@ -1348,8 +1358,10 @@ public class BushMissionGen {
 					recept_fileLOC = recept_files[4].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_project = recept_files[5].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_package = recept_files[6].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
-					recept_scene = recept_files[7].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
-					recept_weather = recept_files[8].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_business = recept_files[7].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_marketplace = recept_files[8].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_scene = recept_files[9].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_weather = recept_files[10].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 				} else {
 					recept_root = recept_files[0].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_fileXML = recept_files[1].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
@@ -1357,9 +1369,11 @@ public class BushMissionGen {
 					recept_fileLOC = recept_files[3].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_project = recept_files[4].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 					recept_package = recept_files[5].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
-					recept_scene = recept_files[6].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
-					recept_overview = recept_files[7].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
-					recept_weather = recept_files[8].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_business = recept_files[6].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_marketplace = recept_files[7].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_scene = recept_files[8].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_overview = recept_files[9].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
+					recept_weather = recept_files[10].replace("##PATH_DIR##", rf_mode == 0 ? pathRoot : pathCurrent);
 				}
 				break;
 			}
@@ -1509,11 +1523,17 @@ public class BushMissionGen {
 		File packageDefinitionsDir = new File(packageDefinitionsPath);
 		packageDefinitionsDir.mkdirs();
 
+		File packageMiscDir = new File(packageMiscPath);
+		packageMiscDir.mkdirs();
+
 		File packageSourcesDir = new File(packageSourcesPath);
 		packageSourcesDir.mkdirs();
 
 		File contentInfoDir = new File(contentInfoPath);
 		contentInfoDir.mkdirs();
+
+		File marketplaceDataDir = new File(marketplaceDataPath);
+		marketplaceDataDir.mkdirs();
 
 		File sceneDir = new File(scenePath);
 		sceneDir.mkdirs();
@@ -1665,6 +1685,31 @@ public class BushMissionGen {
 		if (msgJPG3 != null) {
 			return msgJPG3;
 		}
+		String imageFile4 = marketplaceDataPath + File.separator + "BushMissionGen3840x2160.jpg";
+		Message msgJPG4 = mImageHandling.generateImage(new File(imageFile4), 3840, 2160, "jpg", "Generated|in|BushMissionGen v" + BushMissionGen.VERSION, Font.BOLD, 1.5d);
+		if (msgJPG4 != null) {
+			return msgJPG4;
+		}
+		String imageFile5 = marketplaceDataPath + File.separator + "thumbnail_main.jpg";
+		Message msgJPG5 = mImageHandling.generateImage(new File(imageFile5), 1380, 1302, "jpg", "Generated|in|BushMissionGen v" + BushMissionGen.VERSION, Font.BOLD, 0.8d);
+		if (msgJPG5 != null) {
+			return msgJPG5;
+		}
+		String imageFile6 = marketplaceDataPath + File.separator + "thumbnail_secondary.jpg";
+		Message msgJPG6 = mImageHandling.generateImage(new File(imageFile6), 1856, 485, "jpg", "Generated|in|BushMissionGen v" + BushMissionGen.VERSION, Font.BOLD, 1.5d);
+		if (msgJPG6 != null) {
+			return msgJPG6;
+		}
+		String imageFile7 = marketplaceDataPath + File.separator + "ContentInfo_Thumbnail.jpg";
+		Message msgJPG7 = mImageHandling.generateImage(new File(imageFile7), 412, 170, "jpg", "Generated|in|BushMissionGen v" + BushMissionGen.VERSION, Font.BOLD, 1.5d);
+		if (msgJPG7 != null) {
+			return msgJPG7;
+		}
+		String imageFile8 = marketplaceDataPath + File.separator + "Thumbnail.jpg";
+		Message msgJPG8 = mImageHandling.generateImage(new File(imageFile8), 904, 486, "jpg", "Generated|in|BushMissionGen v" + BushMissionGen.VERSION, Font.BOLD, 1.5d);
+		if (msgJPG8 != null) {
+			return msgJPG8;
+		}
 
 		if (mode == 1) {
 			// Did the user add POI images after generating??
@@ -1803,6 +1848,14 @@ public class BushMissionGen {
 		Message msgScene = handleScene(metaEntry, entries, recept_scene, outFileScene);
 		if (msgScene != null) {
 			return msgScene;
+		}
+		Message msgBusiness = handleBusiness(metaEntry, entries, recept_business, outFileBusiness);
+		if (msgBusiness != null) {
+			return msgBusiness;
+		}
+		Message msgMarketplace = handleMarketplace(metaEntry, entries, recept_marketplace, outFileMarketplace);
+		if (msgMarketplace != null) {
+			return msgMarketplace;
 		}
 
 		// JSON
@@ -4825,6 +4878,41 @@ public class BushMissionGen {
 		PACKAGE_FILE = PACKAGE_FILE.replace("##LANDMARKS##", sceneSB.toString());
 
 		Message msg = mFileHandling.writeStringToFile(outFile, PACKAGE_FILE, cs);
+		if (msg != null) {
+			return msg;
+		}
+
+		return null;
+	}
+
+	private Message handleBusiness(MetaEntry metaEntry, List<MissionEntry> entries, String inFile, String outFile) {
+		Charset cs = StandardCharsets.UTF_8;
+		String BUSINESS_FILE = mFileHandling.readFileToString(inFile, cs);
+
+		BUSINESS_FILE = BUSINESS_FILE.replace("##META_PROJECT##", metaEntry.project);
+		BUSINESS_FILE = BUSINESS_FILE.replace("##META_AUTHOR##", metaEntry.author);
+
+		Message msg = mFileHandling.writeStringToFile(outFile, BUSINESS_FILE, cs);
+		if (msg != null) {
+			return msg;
+		}
+
+		return null;
+	}
+
+	private Message handleMarketplace(MetaEntry metaEntry, List<MissionEntry> entries, String inFile, String outFile) {
+		Charset cs = StandardCharsets.UTF_8;
+		String MARKETPLACE_FILE = mFileHandling.readFileToString(inFile, cs);
+
+		MARKETPLACE_FILE = MARKETPLACE_FILE.replace("##META_PROJECT##", metaEntry.project);
+		MARKETPLACE_FILE = MARKETPLACE_FILE.replace("##META_AUTHOR##", metaEntry.author);
+		MARKETPLACE_FILE = MARKETPLACE_FILE.replace("##META_TITLE##", metaEntry.title);
+		MARKETPLACE_FILE = MARKETPLACE_FILE.replace("##META_DESCR##", metaEntry.description);
+		MARKETPLACE_FILE = MARKETPLACE_FILE.replace("##TAG_TYPE##", metaEntry.missionType.equals("bush") ? "BUSHTRIP" : "LANDING CHALLENGE");
+		MARKETPLACE_FILE = MARKETPLACE_FILE.replace("##ACTIVITY_TYPE##", metaEntry.missionType.equals("bush") ? "BUSH" : "LANDING");
+		MARKETPLACE_FILE = MARKETPLACE_FILE.replace("##BLOCKS##", "");
+
+		Message msg = mFileHandling.writeStringToFile(outFile, MARKETPLACE_FILE, cs);
 		if (msg != null) {
 			return msg;
 		}
