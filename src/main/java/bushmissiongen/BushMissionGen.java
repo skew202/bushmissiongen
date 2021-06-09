@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -67,7 +68,7 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.07";
+	public static final String VERSION = "2.08";
 
 	// NEWS
 	// - 
@@ -3962,6 +3963,10 @@ public class BushMissionGen {
 			sb_DISABLE_STUFF.append(System.lineSeparator()).append("        <FlowEvent id=\"PANEL_OBJECTIVES_FORCE_DISABLED\" />");
 		}
 
+		if (metaEntry.weather.startsWith("live")) {
+			sb_DISABLE_STUFF.append(System.lineSeparator()).append("        <FlowEvent id=\"PANEL_WEATHER_FORCE_ENABLED\" />");
+		}
+
 		if (!metaEntry.noCollisions.isEmpty()) {
 			sb_INTRO_STUFF.append(System.lineSeparator()).append("        <ObjectReference id=\"NoCollisions\" InstanceId=\"{C1FA4253-65BD-4370-986C-40CA123E4C70}\" />");
 		}
@@ -4842,10 +4847,8 @@ public class BushMissionGen {
 		StringBuffer sceneSB = new StringBuffer();
 
 		// Add POIs
-		int lmCount = 0;
 		for (Landmark lm : metaEntry.landmarks) {
-			String refId = "206E4DAF-41DB-4198-B0A8-42094815D";
-			refId += String.format("%03d", (lmCount++) + 1);
+			String refId = UUID.randomUUID().toString().toUpperCase();
 			String rowTemplate = "    <LandmarkLocation offset=\"" + lm.offset + "\" alt=\"" + lm.altitude + "\" lon=\"" + lm.lon + "\" lat=\"" + lm.lat + "\" owner=\"" + metaEntry.author + "\" name=\"" + lm.value + "\" type=\"" + lm.type + "\" instanceId=\"{" + refId + "}\"/>";
 			sceneSB.append(System.lineSeparator()).append(rowTemplate);
 		}
