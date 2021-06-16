@@ -7,7 +7,7 @@ https://flightsim.to/file/3681/bushmissiongen#
 
 # Development
 
-Eclipse 2021-03 is the preferred IDE for developing BMG.
+Eclipse 2021-06 is the preferred IDE for developing BMG.
 
 ### Required downloads and installation
 
