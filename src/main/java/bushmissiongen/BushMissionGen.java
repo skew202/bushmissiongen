@@ -68,7 +68,7 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.08";
+	public static final String VERSION = "2.09";
 
 	// NEWS
 	// - 

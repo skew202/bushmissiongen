@@ -1,8 +1,11 @@
 package bushmissiongen.entries;
 
+import org.junit.*;
+
 import junit.framework.TestCase;
 
 public class MetaEntryTest extends TestCase {
+	@Test
 	public void testSetLat() {
 		MetaEntry me = new MetaEntry();
 		me.setLat("12° 17' 49,45\" N");
@@ -47,6 +50,7 @@ public class MetaEntryTest extends TestCase {
 		assertEquals("S64° 24' 44\"", me.lat);
 	}
 
+	@Test
 	public void testSetLon() {
 		MetaEntry me = new MetaEntry();
 		me.setLon("16° 44' 34,86\" E");
@@ -91,18 +95,21 @@ public class MetaEntryTest extends TestCase {
 		assertEquals("W78° 37' 51\"", me.lon);
 	}
 
+	@Test
 	public void testGetShortLat() {
 		MetaEntry me = new MetaEntry();
 		me.setLat("8° 07' 34.4\" N");
 		assertEquals("N8°07'34.4\"", me.getShortLat());
 	}
 
+	@Test
 	public void testGetShortLon() {
 		MetaEntry me = new MetaEntry();
 		me.setLon("98° 55' 22.0\" E");
 		assertEquals("E98°55'22.0\"", me.getShortLon());
 	}
 
+	@Test
 	public void testSetAlt() {
 		MetaEntry me = new MetaEntry();
 		me.setAlt("+000062.00");
@@ -117,6 +124,7 @@ public class MetaEntryTest extends TestCase {
 		assertEquals("-000062.00", me.alt);
 	}
 
+	@Test
 	public void testGetShortAlt() {
 		MetaEntry me = new MetaEntry();
 		me.setAlt("+000062.00");
