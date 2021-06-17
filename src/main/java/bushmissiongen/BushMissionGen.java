@@ -4023,9 +4023,56 @@ public class BushMissionGen {
 		Charset cs = Charset.forName("windows-1252");
 		String XML_FILE = mFileHandling.readFileToString(inFile, cs);
 
+		StringBuffer sb_INTRODIALOG = new StringBuffer();
+		if (!metaEntry.introSpeeches.isEmpty()) {
+			int count1 = 0;
+
+			for (DelayedText is : metaEntry.introSpeeches) {
+				String ss = XML_INTRODIALOG;
+
+				// Wav subtitles?
+				String wav = is.procWave;
+				String text = is.procTextID;
+
+				String textXML = "";
+				if (!wav.isEmpty()) {
+					textXML += "<SoundFileName>" + wav + "</SoundFileName>";
+					if (text != null) {
+						textXML += System.lineSeparator() + "      " + "<Text>" + text + "</Text>";
+					}
+					mSounds.add(wav);
+				} else {
+					textXML += "<Text>" + text + "</Text>";
+				}
+
+				ss = ss.replace("##INTRODIALOG##", textXML);
+
+				String refId1 = "33C886C6-2E7B-4DD3-AF43-CE2FD4CE3";
+				refId1 += String.format("%03d", count1 + 1);
+				ss = ss.replace("##REF_ID_DIALOG##", refId1);
+				ss = ss.replace("##DESCR_DIALOG##",  "DialogIntro" + (count1 + 1));
+				ss = ss.replace("##DELAY_DIALOG##",  "2.000");
+
+				String refId2 = "AD3E6999-7687-479D-81B8-B327E1D21";
+				refId2 += String.format("%03d", count1 + 1);
+				ss = ss.replace("##REF_ID_TRIGGER##", refId2);
+				ss = ss.replace("##DESCR_TRIGGER##", "TimerTriggerIntro" + (count1 + 1));
+				ss = ss.replace("##DELAY_TRIGGER##", is.delay);
+
+				// JSON
+				mGeoJSON.appendPolygon(entries.get(0).latlon, "150.000", "150.000", "0.000", "#555555", GeoColor.INTRO);
+
+				sb_INTRODIALOG.append(System.lineSeparator());
+				sb_INTRODIALOG.append(System.lineSeparator());
+				sb_INTRODIALOG.append(ss);
+				count1++;
+			}
+		}
+
 		XML_FILE = XML_FILE.replace("##META_PROJECT##", metaEntry.project);
 		XML_FILE = XML_FILE.replace("##META_TITLE##", metaEntry.titleID);
 		XML_FILE = XML_FILE.replace("##META_MAXDISTANCETORUNWAY##", metaEntry.maxDistanceToRunway);
+		XML_FILE = XML_FILE.replace("##INTRODIALOG##", sb_INTRODIALOG);
 
 		Message msg = mFileHandling.writeStringToFile(outFile, XML_FILE, cs);
 		if (msg != null) {

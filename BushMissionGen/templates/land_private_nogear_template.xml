@@ -2,7 +2,7 @@
 <SimBase.Document Type="MissionFile" version="1,0">
   <Title>##META_TITLE##</Title>
   <Filename>##META_PROJECT##.spb</Filename>
-  <WorldBase.Flight>
+  <WorldBase.Flight>##INTRODIALOG##
     <SimMission.ObjectActivationAction InstanceId="{23EEAA99-5BF4-46EB-94C8-9F143237E918}">
       <WorldBase.ObjectReferenceList>
         <ObjectReference id="Goal GL_Mission" InstanceId="{B488630F-D746-4676-A1FB-5375C6EBA07B}" />
