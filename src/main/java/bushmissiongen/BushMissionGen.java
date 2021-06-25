@@ -68,14 +68,13 @@ import bushmissiongen.wizard.pages.TitlePage;
  * @author  f99mlu
  */
 public class BushMissionGen {
-	public static final String VERSION = "2.09";
+	public static final String VERSION = "2.10";
 
 	// NEWS
 	// - 
 
 	// TO DO
-	// - What is the Overview.htm file used for in landing challenges?
-	// - Leaderboards for landing challenges? Possible for 3rd party missions?
+	// - 
 
 	private static final int META_REQUIRED_ITEMS = 20;
 	private static final int META_SPLIT_LEN = 2;
@@ -4652,7 +4651,9 @@ public class BushMissionGen {
 				if (wav.contains("|")) {
 					String[] split = wav.split("\\|");
 					wav = split[0];
-					subtitles = split[1];
+					if (split.length>1) {
+						subtitles = split[1];
+					}
 				}
 
 				if (wav.toUpperCase().endsWith(".WAV")) {
@@ -4687,7 +4688,9 @@ public class BushMissionGen {
 				if (wav.contains("|")) {
 					String[] split = wav.split("\\|");
 					wav = split[0];
-					subtitles = split[1];
+					if (split.length>1) {
+						subtitles = split[1];
+					}
 				}
 
 				if (wav.toUpperCase().endsWith(".WAV")) {
@@ -4722,7 +4725,9 @@ public class BushMissionGen {
 				if (wav.contains("|")) {
 					String[] split = wav.split("\\|");
 					wav = split[0];
-					subtitles = split[1];
+					if (split.length>1) {
+						subtitles = split[1];
+					}
 				}
 
 				if (wav.toUpperCase().endsWith(".WAV")) {
@@ -4759,7 +4764,9 @@ public class BushMissionGen {
 					if (wav.contains("|")) {
 						String[] split = wav.split("\\|");
 						wav = split[0];
-						subtitles = split[1];
+						if (split.length>1) {
+							subtitles = split[1];
+						}
 					}
 
 					if (wav.toUpperCase().endsWith(".WAV")) {
@@ -4797,7 +4804,9 @@ public class BushMissionGen {
 				if (wav.contains("|")) {
 					String[] split = wav.split("\\|");
 					wav = split[0];
-					subtitles = split[1];
+					if (split.length>1) {
+						subtitles = split[1];
+					}
 				}
 
 				if (wav.toUpperCase().endsWith(".WAV")) {

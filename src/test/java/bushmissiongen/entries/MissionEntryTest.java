@@ -29,6 +29,10 @@ public class MissionEntryTest extends TestCase {
 		me.setLatlon("N8° 07' 34.4\", E98° 55' 22.0\"");
 		assertEquals("N8° 07' 34.4\",E98° 55' 22.0\"", me.latlon);
 
+		me = new MissionEntry();
+		me.setLatlon("N21°55'27.90\"W159°20'21.90\"");
+		assertEquals("N21° 55' 27.90\",W159° 20' 21.90\"", me.latlon);
+
 		// ----
 
 		me = new MissionEntry();

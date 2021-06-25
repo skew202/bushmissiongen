@@ -185,8 +185,9 @@ public class MissionEntry extends GenericEntry {
 		}
 
 		// N8° 07' 34.4",E98° 55' 22.0"
+		// N8° 07' 34.4"E98° 55' 22.0"
 		{
-			Pattern pattern = Pattern.compile("^([NS]\\d+°)\\s?(\\d+')\\s?(\\d+[.]?[\\d]+?\"),\\s?([WE]\\d+°)\\s?(\\d+')\\s?(\\d+[.]?[\\d]+?\")");
+			Pattern pattern = Pattern.compile("^([NS]\\d+°)\\s?(\\d+')\\s?(\\d+[.]?[\\d]+?\")[,]?\\s?([WE]\\d+°)\\s?(\\d+')\\s?(\\d+[.]?[\\d]+?\")");
 			Matcher matcher = pattern.matcher(string);
 			if (this.latlon.isEmpty() && matcher.find())
 			{
